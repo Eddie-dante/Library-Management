@@ -4,54 +4,40 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ngatho Secondary School Library</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
-    :root {
-      --primary-color: #1A3C5A;
-      --accent-color: #D4A017;
-      --secondary-color: #2E7D32;
-      --background-image: url('https://images.unsplash.com/photo-14973662105479-4275897d2931?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3');
-      --content-bg-overlay: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9));
-      --border-radius: 12px;
-      --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-
+    /* Ensure HTML and BODY take full height for background image */
     html, body {
       height: 100%;
       margin: 0;
       padding: 0;
-      font-family: 'Roboto', 'Segoe UI', sans-serif;
+      font-family: 'Segoe UI', sans-serif;
       color: #333;
-      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), var(--background-image);
+      background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Flag_of_Kenya.svg/1280px-Flag_of_Kenya.svg.png');
       background-size: cover;
       background-repeat: no-repeat;
       background-position: center center;
       background-attachment: fixed;
-      background-color: #f5f5f5;
     }
 
-    @media (max-width: 768px) {
-      table {
-        font-size: 0.85rem;
-      }
-      th, td {
-        padding: 8px;
-      }
-      #login-form-container, .librarian-section, form {
-        padding: 15px;
-        width: 95%;
-      }
-      #initial-buttons button, #backButton, .class-list-btn {
-        padding: 12px 20px;
-        font-size: 1rem;
-      }
+    /* Notification styles */
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 10px 20px;
+      border-radius: 5px;
+      color: white;
+      z-index: 2000;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      role: alert;
     }
+    .notification.error { background-color: #f44336; }
+    .notification.success { background-color: #4CAF50; }
 
     #library-content {
       display: none;
       height: 100%;
       overflow-y: auto;
-      padding: 20px;
     }
 
     #login-screen {
@@ -60,7 +46,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.85);
+      background-color: rgba(0, 0, 0, 0.8);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -69,184 +55,155 @@
     }
 
     #login-form-container {
-      background: var(--content-bg-overlay), var(--background-image);
-      background-size: cover;
-      background-position: center;
+      background-color: white;
       padding: 40px;
-      border-radius: var(--border-radius);
-      box-shadow: var(--box-shadow);
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
       text-align: center;
-      max-width: 450px;
+      max-width: 400px;
       width: 90%;
     }
 
     #login-form-container h2 {
-      color: var(--primary-color);
-      margin-bottom: 20px;
-      font-size: 1.8rem;
+      color: #004D40;
+      margin-bottom: 25px;
     }
 
     #login-form-container input[type="password"] {
       width: calc(100% - 20px);
       padding: 12px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 1rem;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1.1rem;
     }
 
     #login-form-container button {
-      background-color: var(--primary-color);
+      background-color: #004D40;
       color: white;
-      padding: 12px 30px;
+      padding: 12px 25px;
       border: none;
-      border-radius: 6px;
+      border-radius: 5px;
       cursor: pointer;
       font-size: 1.1rem;
-      transition: background-color 0.3s ease, transform 0.2s ease;
+      transition: background-color 0.3s ease;
+      margin: 5px;
     }
 
     #login-form-container button:hover {
-      background-color: var(--accent-color);
-      transform: translateY(-2px);
+      background-color: #26A69A;
     }
 
     #login-error-message {
-      color: #D32F2F;
+      color: red;
       margin-top: 15px;
       font-weight: bold;
       display: none;
-      font-size: 0.9rem;
     }
 
-    #notification {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      padding: 15px;
-      border-radius: 6px;
-      color: white;
-      z-index: 2000;
+    #wallpaper-upload-section {
+      margin-top: 20px;
+      padding-top: 15px;
+      border-top: 1px solid #eee;
+    }
+    #wallpaper-upload-section label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+      color: #555;
+    }
+    #wallpaperInput {
       display: none;
-      max-width: 300px;
     }
-
-    #notification.success {
-      background-color: var(--secondary-color);
+    #customWallpaperButton {
+      background-color: #5cb85c;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      margin-right: 10px;
+      transition: background-color 0.3s ease;
     }
-
-    #notification.error {
-      background-color: #D32F2F;
+    #customWallpaperButton:hover {
+      background-color: #4cae4c;
+    }
+    #wallpaperFileName {
+      display: inline-block;
+      padding: 8px 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+      font-size: 0.9rem;
+      color: #777;
+      width: calc(100% - 130px);
+      vertical-align: middle;
+      text-align: left;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
 
     header {
-      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), var(--background-image);
-      background-size: cover;
-      background-position: center;
+      background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1521587765099-efb676f188ec?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') center center / cover no-repeat;
       color: white;
       text-align: center;
-      padding: 30px 20px;
-      border-radius: var(--border-radius);
-      box-shadow: var(--box-shadow);
-      margin-bottom: 20px;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 2.2rem;
-    }
-
-    header h2 {
-      margin: 5px 0 0;
-      font-size: 1.2rem;
-      font-weight: normal;
+      padding: 20px;
     }
 
     #initial-buttons {
       text-align: center;
-      margin: 40px 0;
+      margin-top: 50px;
+      padding: 20px;
     }
 
-    #initial-buttons button, #backButton, .class-list-btn {
-      padding: 15px 35px;
+    #initial-buttons button {
+      padding: 15px 30px;
       font-size: 1.2rem;
       margin: 10px;
       border: none;
       border-radius: 8px;
       cursor: pointer;
       transition: background-color 0.3s ease, transform 0.2s ease;
-      box-shadow: var(--box-shadow);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
-    #initial-buttons #librarianLoginBtn {
-      background-color: var(--primary-color);
+    #initial-buttons #librarianLoginBtn { background-color: #004D40; color: white; }
+    #initial-buttons #librarianLoginBtn:hover { background-color: #26A69A; transform: translateY(-2px); }
+    #initial-buttons #borrowBookBtn { background-color: #66BB6A; color: white; }
+    #initial-buttons #borrowBookBtn:hover { background-color: #81C784; transform: translateY(-2px); }
+    #initial-buttons #databaseBtn { background-color: #42A5F5; color: white; }
+    #initial-buttons #databaseBtn:hover { background-color: #64B5F6; transform: translateY(-2px); }
+
+    #navigation button {
+      padding: 10px 20px;
+      margin: 5px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #004D40;
       color: white;
+      transition: background-color 0.3s ease;
     }
-
-    #initial-buttons #librarianLoginBtn:hover {
-      background-color: var(--accent-color);
-      transform: translateY(-2px);
-    }
-
-    #initial-buttons #borrowBookBtn {
-      background-color: var(--secondary-color);
-      color: white;
-    }
-
-    #initial-buttons #borrowBookBtn:hover {
-      background-color: #4CAF50;
-      transform: translateY(-2px);
-    }
-
-    #initial-buttons #databaseBtn {
-      background-color: #0288D1;
-      color: white;
-    }
-
-    #initial-buttons #databaseBtn:hover {
-      background-color: #03A9F4;
-      transform: translateY(-2px);
-    }
-
-    #backButton {
-      background-color: #555;
-      color: white;
-      display: none;
-    }
-
-    #backButton:hover {
-      background-color: #777;
-      transform: translateY(-2px);
-    }
-
-    .class-list-btn {
-      background-color: var(--primary-color);
-      color: white;
-    }
-
-    .class-list-btn:hover {
-      background-color: var(--accent-color);
-      transform: translateY(-2px);
-    }
+    #navigation button:hover { background-color: #26A69A; }
 
     form {
-      max-width: 700px;
-      background: var(--content-bg-overlay), var(--background-image);
-      background-size: cover;
-      background-position: center;
-      padding: 25px;
+      max-width: 600px;
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 20px;
       margin: 20px auto;
-      box-shadow: var(--box-shadow);
-      border-radius: var(--border-radius);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
     }
 
     input, select, button {
       width: 100%;
-      padding: 12px;
-      margin: 8px 0;
+      padding: 10px;
+      margin: 10px 0;
       font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
       box-sizing: border-box;
     }
 
@@ -254,28 +211,8 @@
       width: calc(100% - 20px);
     }
 
-    input[type="file"] {
-      padding: 5px;
-      background-color: #f9f9f9;
-      cursor: pointer;
-    }
-
-    input[type="file"]::-webkit-file-upload-button {
-      background-color: var(--primary-color);
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      outline: none;
-    }
-
-    input[type="file"]::-webkit-file-upload-button:hover {
-      background-color: var(--accent-color);
-    }
-
     form button[type="submit"] {
-      background-color: var(--primary-color);
+      background-color: #004D40;
       color: white;
       border: none;
       cursor: pointer;
@@ -283,75 +220,66 @@
     }
 
     form button[type="submit"]:hover {
-      background-color: var(--accent-color);
+      background-color: #26A69A;
     }
 
     table {
       width: 95%;
       margin: 20px auto;
       border-collapse: collapse;
-      background: var(--content-bg-overlay), var(--background-image);
-      background-size: cover;
-      background-position: center;
-      box-shadow: var(--box-shadow);
-      border-radius: var(--border-radius);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+      background-color: rgba(255, 255, 255, 0.9);
     }
 
     th, td {
-      padding: 12px;
+      padding: 10px;
       border: 1px solid #e0e0e0;
       text-align: center;
-      background-color: rgba(255, 255, 255, 0.95);
     }
 
     th {
-      background-color: rgba(245, 245, 245, 0.95);
-      color: var(--primary-color);
-      font-weight: bold;
+      background-color: #f5f5f5;
+      cursor: pointer;
     }
 
-    table button, table input[type="checkbox"] {
-      padding: 8px 15px;
-      background-color: var(--primary-color);
+    th.sort-asc::after { content: ' ↑'; }
+    th.sort-desc::after { content: ' ↓'; }
+
+    table button {
+      width: auto;
+      padding: 5px 10px;
+      margin: 0;
+      background-color: #004D40;
       color: white;
       border: none;
-      border-radius: 6px;
+      border-radius: 4px;
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
 
-    table input[type="checkbox"] {
-      width: auto;
-      padding: 0;
-      margin: 0 auto;
-      display: inline-block;
-    }
-
-    table button:hover, table input[type="checkbox"]:hover {
-      background-color: var(--accent-color);
+    table button:hover {
+      background-color: #26A69A;
     }
 
     .overdue {
-      background-color: #FFEBEE;
-      color: #D32F2F;
+      background-color: #ffdddd;
+      color: #CC0000;
       font-weight: bold;
     }
 
     .notes {
       font-size: 0.95rem;
-      background: var(--content-bg-overlay), var(--background-image);
-      background-size: cover;
-      background-position: center;
-      padding: 20px;
+      background-color: rgba(247, 247, 247, 0.9);
+      padding: 15px;
       margin: 20px auto;
-      border-left: 5px solid var(--primary-color);
+      border-left: 5px solid #004D40;
       max-width: 700px;
-      border-radius: var(--border-radius);
-      box-shadow: var(--box-shadow);
+      color: #333;
+      border-radius: 4px;
     }
 
     .notes strong {
-      color: var(--primary-color);
+      color: #004D40;
     }
 
     .hidden {
@@ -359,19 +287,17 @@
     }
 
     .librarian-section {
-      max-width: 700px;
-      background: var(--content-bg-overlay), var(--background-image);
-      background-size: cover;
-      background-position: center;
-      padding: 25px;
+      max-width: 600px;
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 20px;
       margin: 20px auto;
-      box-shadow: var(--box-shadow);
-      border-radius: var(--border-radius);
-      border-top: 5px solid var(--primary-color);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      border-top: 5px solid #004D40;
     }
 
     .librarian-section h3 {
-      color: var(--primary-color);
+      color: #004D40;
       text-align: center;
       margin-top: 0;
       padding-bottom: 10px;
@@ -381,71 +307,76 @@
     .librarian-section ul {
       list-style: none;
       padding: 0;
-      max-height: 250px;
+      max-height: 200px;
       overflow-y: auto;
       border: 1px solid #eee;
-      border-radius: 6px;
+      border-radius: 4px;
     }
 
     .librarian-section ul li {
-      padding: 10px;
+      padding: 8px 10px;
       border-bottom: 1px solid #f5f5f5;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background-color: rgba(255, 255, 255, 0.95);
+      background-color: #fff;
     }
 
     .librarian-section ul li:last-child {
       border-bottom: none;
     }
 
+    .librarian-section input[type="text"],
+    .librarian-section input[type="number"],
+    .librarian-section select,
     .librarian-section button {
-      background-color: var(--primary-color);
+      margin-bottom: 5px;
+    }
+
+    .librarian-section button {
+      background-color: #004D40;
       color: white;
-      padding: 8px 15px;
     }
 
     .librarian-section button:hover {
-      background-color: var(--accent-color);
+      background-color: #26A69A;
     }
 
     #borrowedSearchInput, #learnerSearchInput {
-      width: calc(95% - 20px);
-      margin: 15px auto;
+      width: calc(95% - 22px);
+      margin: 10px auto;
       display: block;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
     }
 
     .low-stock {
-      background-color: #FFF3E0;
-      border-left: 5px solid #FF9800;
+      background-color: #ffe0b2;
+      border-left: 5px solid #ff9800;
       font-weight: bold;
     }
 
     .out-of-stock {
-      background-color: #FFEBEE;
-      border-left: 5px solid #D32F2F;
+      background-color: #ffcccc;
+      border-left: 5px solid #cc0000;
       font-weight: bold;
-      color: #D32F2F;
+      color: #cc0000;
     }
 
     #due-reminders-section {
       max-width: 700px;
-      background: var(--content-bg-overlay), var(--background-image);
-      background-size: cover;
-      background-position: center;
-      padding: 25px;
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 20px;
       margin: 20px auto;
-      box-shadow: var(--box-shadow);
-      border-radius: var(--border-radius);
-      border-top: 5px solid #D32F2F;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      border-top: 5px solid #E91E63;
     }
 
     #due-reminders-section h3 {
-      color: #D32F2F;
+      color: #E91E63;
       text-align: center;
       margin-top: 0;
       padding-bottom: 10px;
@@ -455,53 +386,196 @@
     #due-reminders-section ul {
       list-style: none;
       padding: 0;
-      max-height: 200px;
+      max-height: 150px;
       overflow-y: auto;
       border: 1px solid #eee;
-      border-radius: 6px;
+      border-radius: 4px;
     }
 
-    .active-borrows {
-      background-color: #E8F5E9;
-      border-left: 5px solid var(--secondary-color);
+    #due-reminders-section ul li {
+      padding: 8px 10px;
+      border-bottom: 1px solid #f5f5f5;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #fff;
+    }
+
+    #due-reminders-section ul li:last-child {
+      border-bottom: none;
+    }
+
+    #due-reminders-section .overdue-item {
+      color: #CC0000;
       font-weight: bold;
     }
+
+    #due-reminders-section .due-soon-item {
+      color: #FF5722;
+    }
+
+    #excel-import-section {
+      max-width: 90%;
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 20px;
+      margin: 20px auto;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      border-top: 5px solid #FFC107;
+    }
+
+    #excel-import-section h3 {
+      color: #FFC107;
+      text-align: center;
+      margin-top: 0;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+    }
+
+    #class-list-table-container {
+      max-height: 400px;
+      overflow-y: auto;
+      margin-top: 20px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    #class-list-table {
+      width: 100%;
+      margin: 0;
+      box-shadow: none;
+    }
+
+    #class-list-table thead th {
+      position: sticky;
+      top: 0;
+      background-color: #f0f0f0;
+      z-index: 1;
+    }
+
+    #class-list-table td {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 150px;
+    }
+
+    #class-list-table td:nth-child(1) {
+      font-weight: bold;
+      min-width: 150px;
+    }
+
+    #class-list-table td:nth-child(2) {
+      text-align: left;
+      min-width: 250px;
+    }
+
+    .borrowed-book-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 0;
+      border-bottom: 1px dashed #eee;
+    }
+
+    .borrowed-book-item:last-child {
+      border-bottom: none;
+    }
+
+    .borrowed-book-item button {
+      padding: 3px 8px;
+      font-size: 0.8em;
+      margin-left: 10px;
+      white-space: nowrap;
+    }
+
+    .no-books-borrowed {
+      color: #777;
+      font-style: italic;
+    }
+
+    #savedClassLists {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 15px;
+      justify-content: center;
+    }
+
+    #savedClassLists button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 8px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      flex-grow: 1;
+      max-width: 180px;
+    }
+
+    #savedClassLists button:hover {
+      background-color: #45a049;
+    }
+
+    #savedClassLists button.delete-btn {
+      background-color: #f44336;
+      margin-left: 5px;
+      flex-grow: 0;
+      width: auto;
+    }
+
+    #savedClassLists button.delete-btn:hover {
+      background-color: #da190b;
+    }
   </style>
+  <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 </head>
 <body>
-  <div id="notification"></div>
   <div id="login-screen">
     <div id="login-form-container">
       <h2>Welcome to Ngatho Secondary School Library</h2>
-      <p>Enter the access password to continue.</p>
-      <input type="password" id="accessPassword" placeholder="Enter password" autocomplete="off" aria-label="Access Password"/>
-      <button id="loginButton" aria-label="Enter Library">Enter Library</button>
-      <p id="login-error-message" class="hidden" aria-live="polite">Incorrect password. Please try again.</p>
+      <p>Please enter the access password to continue.</p>
+      <input type="password" id="accessPassword" placeholder="Enter password" autocomplete="off" aria-label="Enter access password" />
+      <button id="loginButton">Login</button>
+      <button id="enterLibraryButton" class="hidden">Enter Library</button>
+      <p id="login-error-message" class="hidden">Incorrect password. Please try again.</p>
+      <div id="wallpaper-upload-section">
+        <label for="wallpaperInput">Change Wallpaper:</label>
+        <input type="file" id="wallpaperInput" accept="image/*" aria-label="Upload wallpaper image">
+        <button id="customWallpaperButton">Choose File</button>
+        <span id="wallpaperFileName">No file chosen</span>
+      </div>
     </div>
   </div>
 
   <div id="library-content">
-    <button id="backButton" aria-label="Back to Menu">Back to Menu</button>
     <header>
-      <h1>📚 Ngatho Secondary School Library</h1>
-      <h2>📖 Empowering Knowledge, Inspiring Success</h2>
+      <h1>📋 Ngatho Secondary School Library</h1>
+      <h2>📋 Determined to succeed.</h2>
+      <h2>Designed by Wegem(Edwin.G).</h2>
     </header>
 
+    <div id="navigation" class="hidden">
+      <button id="backBtn">Back to Main Menu</button>
+      <button id="logoutBtn">Logout</button>
+    </div>
+
     <div id="initial-buttons">
-      <button id="librarianLoginBtn" aria-label="Librarian Login">Librarian Login</button>
-      <button id="borrowBookBtn" aria-label="Borrow a Book">Borrow a Book</button>
-      <button id="databaseBtn" aria-label="Access Database">Database</button>
+      <button id="librarianLoginBtn">Librarian Login</button>
+      <button id="borrowBookBtn">Borrow a Book</button>
+      <button id="databaseBtn">Database</button>
     </div>
 
     <div id="notes-section" class="hidden">
       <div class="notes">
         <strong>📚 Borrowing Instructions:</strong><br>
-        • <strong>Only librarians</strong> can mark books as returned.<br>
-        • Expected return date is <strong>required</strong> when borrowing.<br>
-        • Library members may borrow <strong>up to 5 books</strong>.<br>
-        • Non-members may borrow <strong>up to 3 books</strong>.<br>
-        • Books not returned by the due date are marked <span style="color:#D32F2F;">Overdue</span>.<br>
-        • Books can only be borrowed if <strong>available</strong>.
+        • <strong>Only the librarian</strong> can mark a book as returned.<br>
+        • The expected return date is <strong>required</strong> during borrowing.<br>
+        • A <strong>library member</strong> may borrow <strong>up to 5 books</strong>.<br>
+        • A <strong>non-member</strong> may only borrow <strong>3 books</strong>.<br>
+        • Books not returned by the due date will be marked as <span style="color:red;">Overdue</span>.<br>
+        • Books can only be borrowed if there is an <strong>available copy</strong>.
       </div>
     </div>
 
@@ -513,19 +587,17 @@
     <div id="librarian-tools-section" class="hidden">
       <div class="librarian-section">
         <h3>👥 Manage Library Members</h3>
-        <label for="newMemberName">Member Name:</label>
-        <input type="text" id="newMemberName" placeholder="Enter member's name" required aria-label="Member Name"/>
-        <label for="newMemberAdm">Admission Number:</label>
-        <input type="text" id="newMemberAdm" placeholder="Enter admission number" required aria-label="Admission Number"/>
-        <button id="addMemberBtn" aria-label="Add Member">Add Member</button>
+        <label for="newMemberName">New Member Name:</label>
+        <input type="text" id="newMemberName" placeholder="Enter member's name" required aria-label="Enter new member name">
+        <button id="addMemberBtn">Add Member</button>
         <h4>Registered Members:</h4>
         <ul id="memberList"></ul>
       </div>
 
       <div class="librarian-section">
         <h3>📚 Manage Book Catalog</h3>
-        <label for="newBookTitleInput">Book Title:</label>
-        <input type="text" id="newBookTitleInput" placeholder="Enter book title" required aria-label="Book Title"/>
+        <label for="newBookTitleInput">New Book Title:</label>
+        <input type="text" id="newBookTitleInput" placeholder="Enter book title" required aria-label="Enter new book title">
         <label for="newBookTypeSelect">Book Type:</label>
         <select id="newBookTypeSelect" required aria-label="Book Type">
           <option value="">-- Book Type --</option>
@@ -535,42 +607,35 @@
           <option>Journal</option>
         </select>
         <label for="newBookQuantityInput">Quantity:</label>
-        <input type="number" id="newBookQuantityInput" value="1" min="1" required aria-label="Book Quantity"/>
-        <button id="addBookToCatalogBtn" aria-label="Add Book to Catalog">Add Book to Catalog</button>
+        <input type="number" id="newBookQuantityInput" value="1" min="1" required aria-label="Enter book quantity">
+        <button id="addBookToCatalogBtn">Add Book to Catalog</button>
         <h4>Available Books:</h4>
         <ul id="bookCatalogList"></ul>
       </div>
 
-      <div class="librarian-section">
-        <h3>🏫 Manage Class Lists</h3>
-        <label for="classListFormLevel">Form Level:</label>
-        <select id="classListFormLevel" required aria-label="Form Level">
-          <option value="">-- Select Form --</option>
-          <option>Form 1</option>
-          <option>Form 2</option>
-          <option>Form 3</option>
-          <option>Form 4</option>
-        </select>
-        <label for="classListStream">Stream:</label>
-        <input type="text" id="classListStream" placeholder="Enter stream (e.g., East, West)" required aria-label="Stream"/>
-        <label for="classListXlsxFile">Upload Student List (Excel):</label>
-        <input type="file" id="classListXlsxFile" accept=".xlsx" aria-label="Upload Student List Excel"/>
-        <p style="font-size:0.85em; color:#555; margin-top:5px;">(Excel format: Columns 'Name' and optional 'ADM')</p>
-        <button id="saveClassListBtn" aria-label="Save Class List">Save Class List</button>
-        <h4>Class Lists:</h4>
-        <div id="classListButtons"></div>
-        <div id="classListDisplay" class="hidden">
-          <h4 id="classListTitle"></h4>
-          <table id="classListTable">
+      <div id="excel-import-section" class="librarian-section">
+        <h3>📊 Import & Manage Class List (Excel)</h3>
+        <p>Upload an Excel file (<code>.xlsx</code> or <code>.xls</code>) with a column named "Name" (or "Learner Name") to view and manage their borrowed books. The first sheet will be used.</p>
+        <input type="file" id="excelFileInput" accept=".xlsx, .xls" aria-label="Upload Excel class list">
+        <button id="resetExcelInputBtn">Reset File</button>
+        <div id="saveClassListDiv" class="hidden" style="margin-top:15px;">
+          <input type="text" id="classListNameInput" placeholder="Name this class list (e.g., Form 1 East)" aria-label="Name class list">
+          <button id="saveClassListBtn">Save Class List</button>
+        </div>
+        <h4>Saved Class Lists:</h4>
+        <div id="savedClassLists"></div>
+        <div id="class-list-table-container">
+          <table id="class-list-table">
             <thead>
               <tr>
-                <th>Student Name</th>
-                <th>ADM</th>
-                <th>Active Borrows</th>
-                <th>Actions</th>
+                <th>Learner Name</th>
+                <th>Borrowed Books</th>
+                <th>Status</th>
               </tr>
             </thead>
-            <tbody id="classListTableBody"></tbody>
+            <tbody id="class-list-table-body">
+              <tr><td colspan="3">Upload an Excel file to see class list, or load a saved list.</td></tr>
+            </tbody>
           </table>
         </div>
       </div>
@@ -579,12 +644,10 @@
     <div id="borrow-form-section" class="hidden">
       <form id="borrowForm">
         <label for="name">Learner's Name:</label>
-        <input type="text" id="name" placeholder="Enter learner's name" required aria-label="Learner's Name"/>
-        <label for="adm">Admission Number:</label>
-        <input type="text" id="adm" placeholder="Enter admission number" required aria-label="Admission Number"/>
+        <input type="text" id="name" placeholder="Enter learner's name" required aria-label="Enter learner's name">
         <p id="borrowLimitInfo" style="font-size:0.9em; color:#666; text-align:right; margin-top:-5px;"></p>
         <label for="formLevel">Form Level:</label>
-        <select id="formLevel" required aria-label="Form Level">
+        <select id="formLevel" required aria-label="Select form level">
           <option value="">-- Select Form --</option>
           <option>Form 1</option>
           <option>Form 2</option>
@@ -592,37 +655,40 @@
           <option>Form 4</option>
         </select>
         <label for="stream">Stream:</label>
-        <input type="text" id="stream" placeholder="Enter stream (e.g., East, West)" required aria-label="Stream"/>
+        <input type="text" id="stream" placeholder="Enter stream (e.g., East, West)" required aria-label="Enter stream">
+        <label for="admAllover">ADM Allover:</label>
+        <input type="text" id="admAllover" placeholder="Enter ADM Allover (e.g., 12345)" required aria-label="Enter ADM Allover">
         <label for="bookTitle">Book Title:</label>
-        <select id="bookTitle" required aria-label="Book Title">
+        <select id="bookTitle" required aria-label="Select book title">
           <option value="">-- Select Book Title --</option>
         </select>
-        <label for="bookType">Book Type:</label>
-        <input type="text" id="bookType" readonly placeholder="Select book title first" aria-label="Book Type"/>
+        <label for="bookType">Book Type (from catalog):</label>
+        <input type="text" id="bookType" readonly placeholder="Select book title first" aria-label="Book type">
         <label for="borrowDate">Date Borrowed:</label>
-        <input type="date" id="borrowDate" required aria-label="Date Borrowed"/>
+        <input type="date" id="borrowDate" required aria-label="Select borrow date">
         <label for="returnDate">Expected Return Date:</label>
-        <input type="date" id="returnDate" required aria-label="Expected Return Date"/>
-        <button type="submit" aria-label="Register Borrow">Register Borrow</button>
+        <input type="date" id="returnDate" required aria-label="Select return date">
+        <button type="submit">Register Borrow</button>
       </form>
     </div>
 
     <div id="borrowed-log-section" class="hidden">
-      <h2 style="text-align:center; color:var(--primary-color);">📖 Borrowed Books Log</h2>
-      <input type="text" id="borrowedSearchInput" placeholder="Search by learner, ADM, book, etc." aria-label="Search Borrowed Books"/>
-      <table>
+      <h2 style="text-align:center;">📖 Borrowed Books Log</h2>
+      <input type="text" id="borrowedSearchInput" placeholder="Search borrowed books (learner, book title, etc.)" aria-label="Search borrowed books">
+      <button id="exportBorrowedBtn">Export to Excel</buttonoload
+      <table id="borrowedBooksTable">
         <thead>
           <tr>
-            <th>Learner</th>
-            <th>ADM</th>
-            <th>Form</th>
-            <th>Stream</th>
-            <th>Book</th>
-            <th>Type</th>
-            <th>Date Borrowed</th>
-            <th>Return Date</th>
-            <th>Status</th>
-            <th>Return</th>
+            <th data-column="0">Learner</th>
+            <th data-column="1">ADM Allover</th>
+            <th data-column="2">Form</th>
+            <th data-column="3">Stream</th>
+            <th data-column="4">Book</th>
+            <th data-column="5">Type</th>
+            <th data-column="6">Date Borrowed</th>
+            <th data-column="7">Return Date</th>
+            <th data-column="8">Status</th>
+            <th>Return (By Librarian)</th>
           </tr>
         </thead>
         <tbody id="tableBody"></tbody>
@@ -630,23 +696,13 @@
     </div>
 
     <div id="learner-history-section" class="hidden">
-      <h2 style="text-align:center; color:var(--primary-color);">📜 Learner Borrowing History</h2>
-      <div style="display:flex; justify-content:center; gap:10px; margin-bottom:15px;">
-        <select id="filterHistoryFormLevel" style="width:150px;" aria-label="Filter by Form Level">
-          <option value="">Filter by Form</option>
-        </select>
-        <select id="filterHistoryStream" style="width:150px;" aria-label="Filter by Stream">
-          <option value="">Filter by Stream</option>
-        </select>
-      </div>
-      <input type="text" id="learnerSearchInput" placeholder="Search by learner name or ADM" aria-label="Search Learner"/>
+      <h2 style="text-align:center;">📜 Learner Borrowing History</h2>
+      <input type="text" id="learnerSearchInput" placeholder="Search learner by name or ADM" aria-label="Search learner history">
       <table id="learnerHistoryTable">
         <thead>
           <tr>
             <th>Learner</th>
-            <th>ADM</th>
-            <th>Form</th>
-            <th>Stream</th>
+            <th>ADM Allover</th>
             <th>Book</th>
             <th>Type</th>
             <th>Borrowed</th>
@@ -656,29 +712,28 @@
           </tr>
         </thead>
         <tbody id="learnerHistoryTableBody">
-          <tr><td colspan="10">Search for a learner to view their history.</td></tr>
+          <tr><td colspan="8">Search for a learner to view their history.</td></tr>
         </tbody>
       </table>
     </div>
   </div>
 
   <script>
-    // Debug mode (set to true for detailed console logging)
-    const DEBUG = true;
-
-    // Passwords (for client-side only; use server-side authentication in production)
-    const MASTER_PASSWORD = 'edwin.g';
-    const LIBRARIAN_PASSWORD = 'eddie';
-    const BORROW_PASSWORD = 'giggy';
-    const DATABASE_PASSWORD = 'data123';
+    // Constants
+    const COLORS = {
+      DEEP_TEAL: '#004D40',
+      LIGHT_TEAL: '#26A69A',
+      SOFT_GREEN: '#66BB6A'
+    };
 
     // Element references
-    const form = document.getElementById('borrowForm');
+    const borrowForm = document.getElementById('borrowForm');
     const tableBody = document.getElementById('tableBody');
     const librarianLoginBtn = document.getElementById('librarianLoginBtn');
     const borrowBookBtn = document.getElementById('borrowBookBtn');
     const databaseBtn = document.getElementById('databaseBtn');
     const initialButtonsDiv = document.getElementById('initial-buttons');
+    const navigationDiv = document.getElementById('navigation');
     const notesSection = document.getElementById('notes-section');
     const librarianToolsSection = document.getElementById('librarian-tools-section');
     const borrowFormSection = document.getElementById('borrow-form-section');
@@ -688,7 +743,6 @@
     const learnerHistorySection = document.getElementById('learner-history-section');
     const learnerHistoryTableBody = document.getElementById('learnerHistoryTableBody');
     const newMemberNameInput = document.getElementById('newMemberName');
-    const newMemberAdmInput = document.getElementById('newMemberAdm');
     const addMemberBtn = document.getElementById('addMemberBtn');
     const memberListUl = document.getElementById('memberList');
     const newBookTitleInput = document.getElementById('newBookTitleInput');
@@ -696,706 +750,87 @@
     const newBookQuantityInput = document.getElementById('newBookQuantityInput');
     const addBookToCatalogBtn = document.getElementById('addBookToCatalogBtn');
     const bookCatalogListUl = document.getElementById('bookCatalogList');
-    const classListFormLevelSelect = document.getElementById('classListFormLevel');
-    const classListStreamInput = document.getElementById('classListStream');
-    const classListXlsxFileInput = document.getElementById('classListXlsxFile');
-    const saveClassListBtn = document.getElementById('saveClassListBtn');
-    const classListButtonsDiv = document.getElementById('classListButtons');
-    const classListDisplayDiv = document.getElementById('classListDisplay');
-    const classListTitle = document.getElementById('classListTitle');
-    const classListTableBody = document.getElementById('classListTableBody');
     const borrowBookTitleSelect = document.getElementById('bookTitle');
     const borrowBookTypeInput = document.getElementById('bookType');
     const nameInput = document.getElementById('name');
-    const admInput = document.getElementById('adm');
-    const formLevelInput = document.getElementById('formLevel');
+    const borrowLimitInfo = document.getElementById('borrowLimitInfo');
+    const admAlloverInput = document.getElementById('admAllover');
+    const formLevelSelect = document.getElementById('formLevel');
     const streamInput = document.getElementById('stream');
     const borrowDateInput = document.getElementById('borrowDate');
     const returnDateInput = document.getElementById('returnDate');
-    const borrowLimitInfo = document.getElementById('borrowLimitInfo');
     const loginScreen = document.getElementById('login-screen');
     const accessPasswordInput = document.getElementById('accessPassword');
     const loginButton = document.getElementById('loginButton');
+    const enterLibraryButton = document.getElementById('enterLibraryButton');
     const loginErrorMessage = document.getElementById('login-error-message');
     const libraryContent = document.getElementById('library-content');
+    const wallpaperInput = document.getElementById('wallpaperInput');
+    const customWallpaperButton = document.getElementById('customWallpaperButton');
+    const wallpaperFileNameSpan = document.getElementById('wallpaperFileName');
     const borrowedSearchInput = document.getElementById('borrowedSearchInput');
     const learnerSearchInput = document.getElementById('learnerSearchInput');
-    const filterHistoryFormLevelSelect = document.getElementById('filterHistoryFormLevel');
-    const filterHistoryStreamSelect = document.getElementById('filterHistoryStream');
-    const backButton = document.getElementById('backButton');
-    const notificationDiv = document.getElementById('notification');
+    const excelFileInput = document.getElementById('excelFileInput');
+    const resetExcelInputBtn = document.getElementById('resetExcelInputBtn');
+    const saveClassListDiv = document.getElementById('saveClassListDiv');
+    const classListNameInput = document.getElementById('classListNameInput');
+    const saveClassListBtn = document.getElementById('saveClassListBtn');
+    const savedClassListsContainer = document.getElementById('savedClassLists');
+    const classListTableBody = document.getElementById('class-list-table-body');
+    const exportBorrowedBtn = document.getElementById('exportBorrowedBtn');
 
+    // Global variables
     let isLibrarianMode = false;
+    let currentImportedLearners = [];
+    let cachedMembers = [];
+    let cachedBookCatalog = [];
+    let cachedBorrowedBooks = [];
 
-    // Utility functions
-    function generateUUID() {
-      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-      });
-    }
+    // TODO: Replace with backend API call for secure password validation
+    const MASTER_PASSWORD = 'edwin.g'; // Placeholder; move to server-side
+    const LIBRARIAN_PASSWORD = 'eddie'; // Placeholder; move to server-side
+    const BORROW_PASSWORD = 'giggy'; // Placeholder; move to server-side
 
-    function showNotification(message, type = 'success') {
-      if (DEBUG) console.log(`[Notification] ${type.toUpperCase()}: ${message}`);
-      notificationDiv.textContent = message;
-      notificationDiv.className = type;
-      notificationDiv.style.display = 'block';
-      setTimeout(() => {
-        notificationDiv.style.display = 'none';
-      }, 3000);
-    }
-
+    // Utility Functions
     function getData(key) {
       try {
-        const data = localStorage.getItem(key);
-        return data ? JSON.parse(data) : [];
+        return JSON.parse(localStorage.getItem(key)) || [];
       } catch (e) {
-        console.error(`Error parsing ${key} from localStorage:`, e);
-        showNotification(`Error loading ${key}. Resetting to default.`, 'error');
-        localStorage.removeItem(key);
+        console.error(`Error reading ${key} from localStorage:`, e);
+        showNotification('Failed to load data. Storage may be corrupted.', 'error');
         return [];
       }
     }
 
     function saveData(key, data) {
       try {
-        const stringified = JSON.stringify(data);
-        if (stringified.length > 4 * 1024 * 1024) {
-          showNotification('Local storage is nearly full. Please clear old records.', 'error');
-          return false;
-        }
-        localStorage.setItem(key, stringified);
-        return true;
+        localStorage.setItem(key, JSON.stringify(data));
+        updateCache();
       } catch (e) {
         console.error(`Error saving ${key} to localStorage:`, e);
-        showNotification(`Error saving ${key}. Please try again.`, 'error');
-        return false;
+        showNotification('Failed to save data. Storage may be full.', 'error');
       }
     }
 
-    // Debugging utility to reset localStorage
-    window.resetLocalStorage = function() {
-      localStorage.clear();
-      initData();
-      showNotification('Local storage reset. Page will reload.', 'success');
-      setTimeout(() => location.reload(), 1000);
-    };
-
-    // Initial Data Setup
-    function initData() {
-      if (!localStorage.getItem('members')) {
-        saveData('members', [
-          { name: 'John Doe', adm: '1001' },
-          { name: 'Jane Smith', adm: '1002' },
-          { name: 'Alice Green', adm: '1003' }
-        ]);
-      }
-      if (!localStorage.getItem('bookCatalog')) {
-        saveData('bookCatalog', [
-          { title: 'The River and the Source', type: 'Novel', quantity: 5, available: 5 },
-          { title: 'Advanced Mathematics 1', type: 'Textbook', quantity: 3, available: 3 },
-          { title: 'Chemistry Form 4', type: 'Textbook', quantity: 4, available: 4 },
-          { title: 'Introduction to Python', type: 'Reference', quantity: 2, available: 2 },
-          { title: 'Physics Form 3', type: 'Textbook', quantity: 1, available: 1 }
-        ]);
-      }
-      if (!localStorage.getItem('classLists')) {
-        saveData('classLists', []);
-      }
-      let currentBorrowedBooks = getData('borrowedBooks');
-      let needsMigration = false;
-      currentBorrowedBooks.forEach(entry => {
-        if (!entry.id) {
-          entry.id = generateUUID();
-          needsMigration = true;
-        }
-        if (!entry.status) {
-          entry.status = 'Borrowed';
-          needsMigration = true;
-        }
-        if (entry.status === 'Returned' && !entry.dateReturned) {
-          entry.dateReturned = entry.returnDate;
-          needsMigration = true;
-        }
-        if (!entry.adm) {
-          entry.adm = 'unknown';
-          needsMigration = true;
-        }
-        entry.adm = entry.adm.toLowerCase();
-      });
-      if (needsMigration) {
-        saveData('borrowedBooks', currentBorrowedBooks);
-      }
-    }
-    initData();
-
-    function hideAllContentSections() {
-      notesSection.classList.add('hidden');
-      librarianToolsSection.classList.add('hidden');
-      borrowFormSection.classList.add('hidden');
-      borrowedLogSection.classList.add('hidden');
-      dueRemindersSection.classList.add('hidden');
-      learnerHistorySection.classList.add('hidden');
-      initialButtonsDiv.classList.add('hidden');
-      backButton.style.display = 'none';
-      classListDisplayDiv.classList.add('hidden');
+    function updateCache() {
+      cachedMembers = getData('members');
+      cachedBookCatalog = getData('bookCatalog');
+      cachedBorrowedBooks = getData('borrowedBooks');
     }
 
-    function showInitialMenu() {
-      hideAllContentSections();
-      initialButtonsDiv.classList.remove('hidden');
-      isLibrarianMode = false;
+    function sanitizeInput(input) {
+      const div = document.createElement('div');
+      div.textContent = input;
+      return div.innerHTML;
     }
 
-    // Member Management
-    function loadMembers() {
-      const members = getData('members');
-      memberListUl.innerHTML = '';
-      if (members.length === 0) {
-        memberListUl.innerHTML = '<li>No members registered.</li>';
-      } else {
-        members.forEach(member => {
-          const li = document.createElement('li');
-          li.innerHTML = `
-            <span>${member.name} (ADM: ${member.adm})</span>
-            <button class="delete-member-btn" data-adm="${member.adm}" aria-label="Delete Member ${member.name}">Delete</button>
-          `;
-          memberListUl.appendChild(li);
-        });
-      }
-    }
-
-    addMemberBtn.addEventListener('click', () => {
-      const name = newMemberNameInput.value.trim();
-      const adm = newMemberAdmInput.value.trim().toLowerCase();
-      if (DEBUG) console.log(`Attempting to add member: name=${name}, adm=${adm}`);
-      
-      if (!name || !adm) {
-        showNotification('Please enter both name and admission number.', 'error');
-        return;
-      }
-      if (!name.match(/^[A-Za-z\s'-]+$/)) {
-        showNotification('Member name should contain only letters, spaces, hyphens, or apostrophes.', 'error');
-        return;
-      }
-      if (!adm.match(/^[a-z0-9]+$/)) {
-        showNotification('Admission number should contain only letters and numbers.', 'error');
-        return;
-      }
-
-      const members = getData('members');
-      if (members.some(m => m.adm.toLowerCase() === adm)) {
-        showNotification('This admission number is already registered.', 'error');
-        return;
-      }
-
-      members.push({ name, adm });
-      if (saveData('members', members)) {
-        newMemberNameInput.value = '';
-        newMemberAdmInput.value = '';
-        loadMembers();
-        showNotification(`Member "${name}" (ADM: ${adm}) added successfully.`, 'success');
-      } else {
-        showNotification('Failed to save member. Please try again.', 'error');
-      }
-    });
-
-    memberListUl.addEventListener('click', (e) => {
-      if (e.target.classList.contains('delete-member-btn')) {
-        const adm = e.target.dataset.adm.toLowerCase();
-        if (!isLibrarianMode) {
-          showNotification('Access Denied: Only librarians can delete members.', 'error');
-          return;
-        }
-        if (confirm(`Are you sure you want to delete member with ADM ${adm}?`)) {
-          let members = getData('members');
-          members = members.filter(m => m.adm.toLowerCase() !== adm);
-          if (saveData('members', members)) {
-            loadMembers();
-            showNotification(`Member with ADM ${adm} deleted.`, 'success');
-          } else {
-            showNotification('Failed to delete member. Please try again.', 'error');
-          }
-        }
-      }
-    });
-
-    // Book Catalog Management
-    function loadBookCatalog() {
-      const bookCatalog = getData('bookCatalog');
-      bookCatalogListUl.innerHTML = '';
-      borrowBookTitleSelect.innerHTML = '<option value="">-- Select Book Title --</option>';
-      if (bookCatalog.length === 0) {
-        bookCatalogListUl.innerHTML = '<li>No books in catalog.</li>';
-      } else {
-        bookCatalog.sort((a, b) => a.title.localeCompare(b.title)).forEach(book => {
-          const li = document.createElement('li');
-          if (book.available <= 2 && book.available > 0) {
-            li.classList.add('low-stock');
-          } else if (book.available === 0) {
-            li.classList.add('out-of-stock');
-          }
-          li.innerHTML = `
-            <span>${book.title} (${book.type}) - Available: ${book.available}/${book.quantity}</span>
-            <button class="delete-book-btn" data-title="${book.title}" aria-label="Delete Book ${book.title}">Delete</button>
-          `;
-          bookCatalogListUl.appendChild(li);
-          const option = document.createElement('option');
-          option.value = book.title;
-          option.textContent = `${book.title} (Available: ${book.available})`;
-          if (book.available === 0) option.disabled = true;
-          borrowBookTitleSelect.appendChild(option);
-        });
-      }
-    }
-
-    addBookToCatalogBtn.addEventListener('click', () => {
-      const title = newBookTitleInput.value.trim();
-      const type = newBookTypeSelect.value;
-      const quantity = parseInt(newBookQuantityInput.value, 10);
-      if (!title.match(/^[A-Za-z0-9\s'-]+$/)) {
-        showNotification('Book title should contain only letters, numbers, spaces, hyphens, or apostrophes.', 'error');
-        return;
-      }
-      if (title && type && !isNaN(quantity) && quantity > 0) {
-        const bookCatalog = getData('bookCatalog');
-        const existingBookIndex = bookCatalog.findIndex(book => book.title.toLowerCase() === title.toLowerCase());
-        if (existingBookIndex > -1) {
-          bookCatalog[existingBookIndex].quantity += quantity;
-          bookCatalog[existingBookIndex].available += quantity;
-          if (saveData('bookCatalog', bookCatalog)) {
-            showNotification(`Updated quantity for "${title}". New total: ${bookCatalog[existingBookIndex].quantity}`, 'success');
-          } else {
-            showNotification('Failed to update book catalog. Please try again.', 'error');
-            return;
-          }
-        } else {
-          bookCatalog.push({ title, type, quantity, available: quantity });
-          if (saveData('bookCatalog', bookCatalog)) {
-            showNotification(`Added "${title}" with ${quantity} copies to catalog.`, 'success');
-          } else {
-            showNotification('Failed to add book to catalog. Please try again.', 'error');
-            return;
-          }
-        }
-        newBookTitleInput.value = '';
-        newBookTypeSelect.value = '';
-        newBookQuantityInput.value = '1';
-        loadBookCatalog();
-      } else {
-        showNotification('Please enter a valid book title, type, and quantity.', 'error');
-      }
-    });
-
-    bookCatalogListUl.addEventListener('click', (e) => {
-      if (e.target.classList.contains('delete-book-btn')) {
-        const title = e.target.dataset.title;
-        if (!isLibrarianMode) {
-          showNotification('Access Denied: Only librarians can delete books.', 'error');
-          return;
-        }
-        if (confirm(`Are you sure you want to delete "${title}" from the catalog?`)) {
-          let bookCatalog = getData('bookCatalog');
-          bookCatalog = bookCatalog.filter(book => book.title !== title);
-          if (saveData('bookCatalog', bookCatalog)) {
-            loadBookCatalog();
-            showNotification(`Book "${title}" deleted.`, 'success');
-          } else {
-            showNotification('Failed to delete book. Please try again.', 'error');
-          }
-        }
-      }
-    });
-
-    borrowBookTitleSelect.addEventListener('change', () => {
-      const title = borrowBookTitleSelect.value;
-      const bookCatalog = getData('bookCatalog');
-      const book = bookCatalog.find(b => b.title === title);
-      borrowBookTypeInput.value = book ? book.type : '';
-    });
-
-    nameInput.addEventListener('input', updateBorrowLimitInfo);
-    admInput.addEventListener('input', updateBorrowLimitInfo);
-
-    function updateBorrowLimitInfo() {
-      const name = nameInput.value.trim();
-      const adm = admInput.value.trim().toLowerCase();
-      if (name && adm) {
-        const members = getData('members');
-        const isMember = members.some(m => m.name.toLowerCase() === name.toLowerCase() && m.adm.toLowerCase() === adm);
-        const borrowList = getData('borrowedBooks');
-        const currentBorrowCount = borrowList.filter(
-          entry => entry.name.toLowerCase() === name.toLowerCase() && entry.adm.toLowerCase() === adm && entry.status === 'Borrowed'
-        ).length;
-        const limit = isMember ? 5 : 3;
-        borrowLimitInfo.textContent = `Current books: ${currentBorrowCount} / Limit: ${limit}`;
-      } else {
-        borrowLimitInfo.textContent = '';
-      }
-    }
-
-    // Class List Management
-    function loadClassLists() {
-      const classLists = getData('classLists');
-      const borrowList = getData('borrowedBooks');
-      classListButtonsDiv.innerHTML = '';
-      filterHistoryFormLevelSelect.innerHTML = '<option value="">Filter by Form</option>';
-      filterHistoryStreamSelect.innerHTML = '<option value="">Filter by Stream</option>';
-
-      const uniqueForms = new Set();
-      const uniqueStreams = new Set();
-
-      if (classLists.length === 0) {
-        classListButtonsDiv.innerHTML = '<p>No class lists saved.</p>';
-        classListDisplayDiv.classList.add('hidden');
-      } else {
-        classLists.forEach(classList => {
-          uniqueForms.add(classList.form);
-          uniqueStreams.add(classList.stream);
-          const button = document.createElement('button');
-          button.classList.add('class-list-btn');
-          button.dataset.form = classList.form;
-          button.dataset.stream = classList.stream;
-          button.textContent = `${classList.form} ${classList.stream}`;
-          button.setAttribute('aria-label', `View ${classList.form} ${classList.stream} Class List`);
-          classListButtonsDiv.appendChild(button);
-        });
-      }
-
-      uniqueForms.forEach(form => {
-        const option = document.createElement('option');
-        option.value = form;
-        option.textContent = form;
-        filterHistoryFormLevelSelect.appendChild(option);
-      });
-      uniqueStreams.forEach(stream => {
-        const option = document.createElement('option');
-        option.value = stream;
-        option.textContent = stream;
-        filterHistoryStreamSelect.appendChild(option);
-      });
-
-      filterHistoryFormLevelSelect.value = filterHistoryFormLevelSelect.dataset.currentValue || '';
-      filterHistoryStreamSelect.value = filterHistoryStreamSelect.dataset.currentValue || '';
-    }
-
-    function displayClassList(form, stream) {
-      const classLists = getData('classLists');
-      const borrowList = getData('borrowedBooks');
-      const classList = classLists.find(cl => cl.form === form && cl.stream === stream);
-      classListTitle.textContent = `${form} ${stream}`;
-      classListTableBody.innerHTML = '';
-      classListDisplayDiv.classList.remove('hidden');
-
-      if (!classList || classList.students.length === 0) {
-        classListTableBody.innerHTML = '<tr><td colspan="4">No students in this class.</td></tr>';
-        return;
-      }
-
-      classList.students.forEach(student => {
-        const activeBorrows = borrowList.filter(
-          entry => entry.name.toLowerCase() === student.name.toLowerCase() && entry.adm.toLowerCase() === student.adm.toLowerCase() && entry.status === 'Borrowed'
-        ).length;
-        const tr = document.createElement('tr');
-        if (activeBorrows > 0) {
-          tr.classList.add('active-borrows');
-        }
-        tr.innerHTML = `
-          <td>${student.name}</td>
-          <td>${student.adm}</td>
-          <td>${activeBorrows}</td>
-          <td>
-            ${activeBorrows > 0 && isLibrarianMode ? `
-              <input type="checkbox" class="return-all-checkbox" data-name="${student.name}" data-adm="${student.adm}" aria-label="Mark All Books Returned for ${student.name}">
-              <label style="font-size:0.85em;">Mark All Returned</label>
-            ` : ''}
-          </td>
-        `;
-        classListTableBody.appendChild(tr);
-      });
-    }
-
-    saveClassListBtn.addEventListener('click', () => {
-      const formLevel = classListFormLevelSelect.value;
-      const stream = classListStreamInput.value.trim();
-      const xlsxFile = classListXlsxFileInput.files[0];
-      if (!formLevel || !stream) {
-        showNotification('Please select a Form Level and enter a Stream.', 'error');
-        return;
-      }
-      if (!stream.match(/^[A-Za-z\s]+$/)) {
-        showNotification('Stream should contain only letters and spaces.', 'error');
-        return;
-      }
-      if (!xlsxFile) {
-        showNotification('Please select an Excel (.xlsx) file.', 'error');
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        try {
-          const data = new Uint8Array(e.target.result);
-          const workbook = XLSX.read(data, { type: 'array' });
-          if (!workbook.SheetNames.length) {
-            showNotification('Excel file is empty or invalid.', 'error');
-            return;
-          }
-          const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-          const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
-          
-          if (jsonData.length < 1) {
-            showNotification('Excel file has no data.', 'error');
-            return;
-          }
-
-          const headers = jsonData[0].map(h => h ? h.toString().trim().toLowerCase() : '');
-          const nameIndex = headers.indexOf('name');
-          const admIndex = headers.indexOf('adm');
-          if (nameIndex === -1) {
-            showNotification('Excel file must contain a "Name" column.', 'error');
-            return;
-          }
-
-          const students = [];
-          const seenAdms = new Set();
-          for (let i = 1; i < jsonData.length; i++) {
-            const row = jsonData[i];
-            const name = row[nameIndex] ? row[nameIndex].toString().trim() : '';
-            const adm = admIndex !== -1 && row[admIndex] ? row[admIndex].toString().trim().toLowerCase() : 'n/a';
-            if (name && name.match(/^[A-Za-z\s'-]+$/) && (!adm || adm.match(/^[a-z0-9]+$/))) {
-              if (seenAdms.has(adm)) {
-                showNotification(`Duplicate admission number "${adm}" in row ${i + 1}. Skipping.`, 'error');
-                continue;
-              }
-              seenAdms.add(adm);
-              students.push({ name, adm });
-            }
-          }
-          if (students.length === 0) {
-            showNotification('No valid student data in Excel file. Ensure "Name" column has valid names and optional "ADM" column has letters/numbers.', 'error');
-            return;
-          }
-
-          let classLists = getData('classLists');
-          const existingIndex = classLists.findIndex(cl => cl.form === formLevel && cl.stream.toLowerCase() === stream.toLowerCase());
-          if (existingIndex > -1) {
-            if (confirm(`Update class list for ${formLevel} ${stream}?`)) {
-              classLists[existingIndex].students = students;
-              if (saveData('classLists', classLists)) {
-                showNotification(`Class list for ${formLevel} ${stream} updated.`, 'success');
-              } else {
-                showNotification('Failed to save class list. Please try again.', 'error');
-                return;
-              }
-            } else {
-              return;
-            }
-          } else {
-            classLists.push({ form: formLevel, stream, students });
-            if (saveData('classLists', classLists)) {
-              showNotification(`Class list for ${formLevel} ${stream} saved.`, 'success');
-            } else {
-              showNotification('Failed to save class list. Please try again.', 'error');
-              return;
-            }
-          }
-          classListFormLevelSelect.value = '';
-          classListStreamInput.value = '';
-          classListXlsxFileInput.value = '';
-          loadClassLists();
-          loadLearnerHistory();
-        } catch (error) {
-          showNotification('Error parsing Excel file. Please ensure it is a valid .xlsx file with a "Name" column.', 'error');
-          console.error('Excel parsing error:', error);
-        }
-      };
-      reader.onerror = () => showNotification('Error reading Excel file. Please try again.', 'error');
-      reader.readAsArrayBuffer(xlsxFile);
-    });
-
-    classListButtonsDiv.addEventListener('click', (e) => {
-      if (e.target.classList.contains('class-list-btn')) {
-        const form = e.target.dataset.form;
-        const stream = e.target.dataset.stream;
-        displayClassList(form, stream);
-      }
-    });
-
-    classListTableBody.addEventListener('click', (e) => {
-      if (e.target.classList.contains('return-all-checkbox')) {
-        const name = e.target.dataset.name;
-        const adm = e.target.dataset.adm.toLowerCase();
-        if (!isLibrarianMode) {
-          showNotification('Access Denied: Only librarians can return books.', 'error');
-          e.target.checked = false;
-          return;
-        }
-        if (e.target.checked) {
-          if (confirm(`Mark all books borrowed by ${name} (ADM: ${adm}) as returned?`)) {
-            const borrowList = getData('borrowedBooks');
-            const bookCatalog = getData('bookCatalog');
-            const booksToReturn = borrowList.filter(
-              entry => entry.name.toLowerCase() === name.toLowerCase() && entry.adm.toLowerCase() === adm && entry.status === 'Borrowed'
-            );
-            if (booksToReturn.length === 0) {
-              showNotification(`${name} (ADM: ${adm}) has no books to return.`, 'error');
-              e.target.checked = false;
-              return;
-            }
-            booksToReturn.forEach(entry => {
-              const book = bookCatalog.find(b => b.title === entry.book);
-              if (book) {
-                book.available++;
-              }
-              entry.status = 'Returned';
-              entry.dateReturned = new Date().toISOString().split('T')[0];
-            });
-            if (saveData('borrowedBooks', borrowList) && saveData('bookCatalog', bookCatalog)) {
-              loadBorrowed();
-              loadBookCatalog();
-              loadDueReminders();
-              loadClassLists();
-              displayClassList(classListTitle.textContent.split(' ')[0], classListTitle.textContent.split(' ').slice(1).join(' '));
-              showNotification(`All books for ${name} (ADM: ${adm}) returned.`, 'success');
-            } else {
-              showNotification('Failed to return books. Please try again.', 'error');
-              e.target.checked = false;
-            }
-          } else {
-            e.target.checked = false;
-          }
-        }
-      }
-    });
-
-    // Borrow Form
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      const name = nameInput.value.trim();
-      const adm = admInput.value.trim().toLowerCase();
-      const formLevel = formLevelInput.value;
-      const stream = streamInput.value.trim();
-      const bookTitle = borrowBookTitleSelect.value;
-      const type = borrowBookTypeInput.value;
-      const borrowDate = borrowDateInput.value;
-      const returnDate = returnDateInput.value;
-
-      if (DEBUG) console.log(`Borrow attempt: name=${name}, adm=${adm}, book=${bookTitle}, borrowDate=${borrowDate}, returnDate=${returnDate}`);
-
-      if (!name || !adm || !formLevel || !stream || !bookTitle || !type || !borrowDate || !returnDate) {
-        showNotification('Please fill in all fields.', 'error');
-        return;
-      }
-      if (!name.match(/^[A-Za-z\s'-]+$/)) {
-        showNotification('Learner name should contain only letters, spaces, hyphens, or apostrophes.', 'error');
-        return;
-      }
-      if (!adm.match(/^[a-z0-9]+$/)) {
-        showNotification('Admission number should contain only letters and numbers.', 'error');
-        return;
-      }
-      if (!stream.match(/^[A-Za-z\s]+$/)) {
-        showNotification('Stream should contain only letters and spaces.', 'error');
-        return;
-      }
-
-      const today = new Date().toISOString().split('T')[0];
-      if (returnDate < borrowDate) {
-        showNotification('Return date cannot be before borrow date.', 'error');
-        return;
-      }
-      if (borrowDate > today) {
-        showNotification('Borrow date cannot be in the future.', 'error');
-        return;
-      }
-
-      const bookCatalog = getData('bookCatalog');
-      const selectedBook = bookCatalog.find(book => book.title === bookTitle);
-      if (!selectedBook) {
-        showNotification(`"${bookTitle}" not found in catalog.`, 'error');
-        return;
-      }
-      if (selectedBook.available <= 0) {
-        showNotification(`"${bookTitle}" is out of stock.`, 'error');
-        return;
-      }
-
-      const members = getData('members');
-      const isMember = members.some(m => m.name.toLowerCase() === name.toLowerCase() && m.adm.toLowerCase() === adm);
-      const borrowList = getData('borrowedBooks');
-      const currentBorrowCount = borrowList.filter(
-        entry => entry.name.toLowerCase() === name.toLowerCase() && entry.adm.toLowerCase() === adm && entry.status === 'Borrowed'
-      ).length;
-      const limit = isMember ? 5 : 3;
-      if (currentBorrowCount >= limit) {
-        showNotification(`${name} has reached the borrowing limit (${limit} books).`, 'error');
-        return;
-      }
-
-      selectedBook.available--;
-      if (!saveData('bookCatalog', bookCatalog)) {
-        showNotification('Failed to update book catalog. Please try again.', 'error');
-        return;
-      }
-      borrowList.push({
-        id: generateUUID(),
-        name,
-        adm,
-        form: formLevel,
-        stream,
-        book: bookTitle,
-        type,
-        borrowDate,
-        returnDate,
-        status: 'Borrowed',
-        dateReturned: null
-      });
-      if (!saveData('borrowedBooks', borrowList)) {
-        showNotification('Failed to save borrow record. Please try again.', 'error');
-        selectedBook.available++; // Rollback
-        saveData('bookCatalog', bookCatalog);
-        return;
-      }
-      form.reset();
-      borrowBookTypeInput.value = '';
-      borrowLimitInfo.textContent = '';
-      loadBorrowed();
-      loadBookCatalog();
-      loadDueReminders();
-      loadClassLists();
-      showNotification(`"${bookTitle}" borrowed by ${name} (ADM: ${adm}).`, 'success');
-    });
-
-    // Borrowed Books Log
-    function loadBorrowed() {
-      const borrowList = getData('borrowedBooks');
-      tableBody.innerHTML = '';
-      const activeBorrows = borrowList.filter(entry => entry.status === 'Borrowed');
-      if (activeBorrows.length === 0) {
-        tableBody.innerHTML = '<tr><td colspan="10">No books currently borrowed.</td></tr>';
-        return;
-      }
-      const today = new Date().toISOString().split('T')[0];
-      activeBorrows.forEach(entry => {
-        const isOverdue = today > entry.returnDate;
-        const tr = document.createElement('tr');
-        tr.dataset.search = `${entry.name} ${entry.adm} ${entry.book} ${entry.type} ${entry.form} ${entry.stream}`.toLowerCase();
-        tr.innerHTML = `
-          <td>${entry.name}</td>
-          <td>${entry.adm}</td>
-          <td>${entry.form}</td>
-          <td>${entry.stream}</td>
-          <td>${entry.book}</td>
-          <td>${entry.type}</td>
-          <td>${entry.borrowDate}</td>
-          <td>${entry.returnDate}</td>
-          <td class="${isOverdue ? 'overdue' : ''}">${isOverdue ? '⏰ Overdue' : '✅ Borrowed'}</td>
-          <td>${isLibrarianMode ? `<button class="return-book-btn" data-id="${entry.id}" aria-label="Return ${entry.book}">Return</button>` : ''}</td>
-        `;
-        tableBody.appendChild(tr);
-      });
-      filterBorrowedBooks();
+    function showNotification(message, type = 'error') {
+      const notification = document.createElement('div');
+      notification.className = `notification ${type}`;
+      notification.textContent = message;
+      notification.setAttribute('role', 'alert');
+      document.body.appendChild(notification);
+      setTimeout(() => notification.remove(), 3000);
     }
 
     function debounce(func, wait) {
@@ -1406,76 +841,422 @@
       };
     }
 
+    function hideAllContentSections() {
+      notesSection.classList.add('hidden');
+      librarianToolsSection.classList.add('hidden');
+      borrowFormSection.classList.add('hidden');
+      borrowedLogSection.classList.add('hidden');
+      dueRemindersSection.classList.add('hidden');
+      learnerHistorySection.classList.add('hidden');
+    }
+
+    // Validate ADM Allover
+    function isValidAdmAllover(admAllover) {
+      // Example: Allow alphanumeric, 3-10 characters
+      const regex = /^[a-zA-Z0-9]{3,10}$/;
+      return regex.test(admAllover);
+    }
+
+    // Initial Data Setup
+    function initializeData() {
+      if (!localStorage.getItem('members')) {
+        saveData('members', ['John Doe', 'Jane Smith', 'Alice Green']);
+      }
+     if (!localStorage.getItem('bookCatalog')) {
+      saveData('bookCatalog', [
+        { title: 'The River and the Source', type: 'Novel', quantity: 5, available: 5 },
+        { title: 'Advanced Mathematics 1', type: 'Textbook', quantity: 3, available: 3 },
+        { title: 'Chemistry Form 4', type: 'Textbook', quantity: 4, available: 4 },
+        { title: 'Introduction to Python', type: 'Reference', quantity: 2, available: 2 },
+        { title: 'Physics Form 3', type: 'Textbook', quantity: 1, available: 1 }
+      ]);
+    }
+      if (!localStorage.getItem('savedClassLists')) {
+        saveData('savedClassLists', {});
+      }
+      if (!localStorage.getItem('savedWallpaper')) {
+        localStorage.setItem('savedWallpaper', '');
+      }
+      let needsMigration = false;
+      const borrowList = getData('borrowedBooks');
+      borrowList.forEach(entry => {
+        if (!entry.status) {
+          entry.status = 'Borrowed';
+          needsMigration = true;
+        }
+        if (entry.status === 'Returned' && !entry.dateReturned) {
+          entry.dateReturned = entry.returnDate;
+          needsMigration = true;
+        }
+        if (!entry.id) {
+          entry.id = Date.now().toString() + Math.random().toString(36).substring(2, 8);
+          needsMigration = true;
+        }
+        if (!entry.admAllover) {
+          entry.admAllover = 'N/A';
+          needsMigration = true;
+        }
+      });
+      if (needsMigration) {
+        saveData('borrowedBooks', borrowList);
+      }
+      updateCache();
+    }
+
+    // Member Management
+    function loadMembers() {
+      memberListUl.innerHTML = '';
+      if (cachedMembers.length === 0) {
+        memberListUl.innerHTML = '<li>No members registered yet.</li>';
+      } else {
+        cachedMembers.forEach(member => {
+          const li = document.createElement('li');
+          li.innerHTML = `
+            <span>${sanitizeInput(member)}</span>
+            <button onclick="deleteMember('${member}')">Delete</button>
+          `;
+          memberListUl.appendChild(li);
+        });
+      }
+    }
+
+    function addMember() {
+      const newMemberName = sanitizeInput(newMemberNameInput.value.trim());
+      if (!newMemberName) {
+        showNotification('Please enter a valid member name.', 'error');
+        return;
+      }
+      if (cachedMembers.map(m => m.toLowerCase()).includes(newMemberName.toLowerCase())) {
+        showNotification('This member is already registered.', 'error');
+        return;
+      }
+      cachedMembers.push(newMemberName);
+      saveData('members', cachedMembers);
+      newMemberNameInput.value = '';
+      loadMembers();
+      showNotification(`Member "${newMemberName}" added successfully.`, 'success');
+    }
+
+    function deleteMember(memberName) {
+      if (!isLibrarianMode) {
+        showNotification('Access Denied: Only the librarian can delete members.', 'error');
+        return;
+      }
+      if (confirm(`Are you sure you want to delete member "${memberName}"?`)) {
+        cachedMembers = cachedMembers.filter(m => m !== memberName);
+        saveData('members', cachedMembers);
+        loadMembers();
+        showNotification(`Member "${memberName}" deleted successfully.`, 'success');
+      }
+    }
+
+    // Book Catalog Management
+    function loadBookCatalog() {
+      bookCatalogListUl.innerHTML = '';
+      borrowBookTitleSelect.innerHTML = '<option value="">-- Select Book Title --</option>';
+      newBookTypeSelect.innerHTML = '<option value="">-- Book Type --</option>';
+      const uniqueBookTypes = [...new Set(cachedBookCatalog.map(book => book.type))].sort();
+      uniqueBookTypes.forEach(type => {
+        const option = document.createElement('option');
+        option.value = type;
+        option.textContent = type;
+        newBookTypeSelect.appendChild(option.cloneNode(true));
+      });
+      if (cachedBookCatalog.length === 0) {
+        bookCatalogListUl.innerHTML = '<li>No books in catalog yet.</li>';
+      } else {
+        cachedBookCatalog.sort((a, b) => a.title.localeCompare(b.title)).forEach(book => {
+          const li = document.createElement('li');
+          if (book.available <= 2 && book.available > 0) {
+            li.classList.add('low-stock');
+          } else if (book.available === 0) {
+            li.classList.add('out-of-stock');
+          }
+          li.innerHTML = `
+            <span>${sanitizeInput(book.title)} (${book.type}) - Available: ${book.available}/${book.quantity}</span>
+            <button onclick="deleteBook('${book.title}')">Delete</button>
+          `;
+          bookCatalogListUl.appendChild(li);
+          if (book.available > 0) {
+            const option = document.createElement('option');
+            option.value = book.title;
+            option.textContent = `${book.title} (Available: ${book.available})`;
+            borrowBookTitleSelect.appendChild(option);
+          }
+        });
+      }
+    }
+
+    function addBookToCatalog() {
+      const newTitle = sanitizeInput(newBookTitleInput.value.trim());
+      const newType = newBookTypeSelect.value;
+      const newQuantity = parseInt(newBookQuantityInput.value, 10);
+      if (!newTitle || !newType || isNaN(newQuantity) || newQuantity <= 0) {
+        showNotification('Please enter a valid book title, type, and quantity.', 'error');
+        return;
+      }
+      const existingBookIndex = cachedBookCatalog.findIndex(book => book.title.toLowerCase() === newTitle.toLowerCase());
+      if (existingBookIndex > -1) {
+        cachedBookCatalog[existingBookIndex].quantity += newQuantity;
+        cachedBookCatalog[existingBookIndex].available += newQuantity;
+        showNotification(`Updated quantity for "${newTitle}". New total: ${cachedBookCatalog[existingBookIndex].quantity}`, 'success');
+      } else {
+        cachedBookCatalog.push({ title: newTitle, type: newType, quantity: newQuantity, available: newQuantity });
+        showNotification(`Added "${newTitle}" with ${newQuantity} copies to catalog.`, 'success');
+      }
+      saveData('bookCatalog', cachedBookCatalog);
+      newBookTitleInput.value = '';
+      newBookTypeSelect.value = '';
+      newBookQuantityInput.value = '1';
+      loadBookCatalog();
+    }
+
+    function deleteBook(bookTitle) {
+      if (!isLibrarianMode) {
+        showNotification('Access Denied: Only the librarian can delete books.', 'error');
+        return;
+      }
+      if (confirm(`Are you sure you want to delete book "${bookTitle}" from the catalog?`)) {
+        cachedBookCatalog = cachedBookCatalog.filter(book => book.title !== bookTitle);
+        saveData('bookCatalog', cachedBookCatalog);
+        loadBookCatalog();
+        showNotification(`Book "${bookTitle}" deleted from catalog.`, 'success');
+      }
+    }
+
+    // Borrow Form Functions
+    function updateBorrowBookType() {
+      const selectedTitle = borrowBookTitleSelect.value;
+      const selectedBook = cachedBookCatalog.find(book => book.title === selectedTitle);
+      borrowBookTypeInput.value = selectedBook ? selectedBook.type : '';
+    }
+
+    function updateBorrowLimitInfo() {
+      const learnerName = sanitizeInput(nameInput.value.trim());
+      if (learnerName) {
+        const isMember = cachedMembers.map(m => m.toLowerCase()).includes(learnerName.toLowerCase());
+        const currentBorrowCount = cachedBorrowedBooks.filter(
+          entry => entry.name.toLowerCase() === learnerName.toLowerCase() && entry.status === 'Borrowed'
+        ).length;
+        const limit = isMember ? 5 : 3;
+        borrowLimitInfo.textContent = `Current books: ${currentBorrowCount} / Limit: ${limit}`;
+      } else {
+        borrowLimitInfo.textContent = '';
+      }
+    }
+
+    function borrowBook(e) {
+      e.preventDefault();
+      const name = sanitizeInput(nameInput.value.trim());
+      const formLevel = formLevelSelect.value;
+      const stream = sanitizeInput(streamInput.value.trim());
+      const admAllover = sanitizeInput(admAlloverInput.value.trim());
+      const bookTitle = borrowBookTitleSelect.value;
+      const type = borrowBookTypeInput.value;
+      const borrowDate = borrowDateInput.value;
+      const returnDate = returnDateInput.value;
+
+      if (!name || !formLevel || !stream || !admAllover || !bookTitle || !type || !borrowDate || !returnDate) {
+        showNotification('Please fill in all required borrowing details.', 'error');
+        return;
+      }
+
+      if (!isValidAdmAllover(admAllover)) {
+        showNotification('ADM Allover must be 3-10 alphanumeric characters.', 'error');
+        return;
+      }
+
+      const existingAdm = cachedBorrowedBooks.find(entry => entry.admAllover === admAllover && entry.status === 'Borrowed');
+      if (existingAdm && existingAdm.name.toLowerCase() !== name.toLowerCase()) {
+        showNotification(`ADM Allover "${admAllover}" is already associated with another learner.`, 'error');
+        return;
+      }
+
+      const today = new Date().toISOString().split('T')[0];
+      if (!borrowDate || new Date(borrowDate) > new Date(today)) {
+        showNotification('Borrow date must be today or in the past.', 'error');
+        return;
+      }
+      if (!returnDate || new Date(returnDate) < new Date(borrowDate)) {
+        showNotification('Return date cannot be before borrow date.', 'error');
+        return;
+      }
+      if (new Date(returnDate).setHours(0,0,0,0) < new Date(today).setHours(0,0,0,0)) {
+        showNotification('Return date cannot be in the past.', 'error');
+        return;
+      }
+
+      const selectedBook = cachedBookCatalog.find(book => book.title === bookTitle);
+      if (!selectedBook || selectedBook.available <= 0) {
+        showNotification(`"${bookTitle}" is currently out of stock.`, 'error');
+        return;
+      }
+
+      const isMember = cachedMembers.map(m => m.toLowerCase()).includes(name.toLowerCase());
+      const currentBorrowCount = cachedBorrowedBooks.filter(
+        entry => entry.name.toLowerCase() === name.toLowerCase() && entry.status === 'Borrowed'
+      ).length;
+      const limit = isMember ? 5 : 3;
+      if (currentBorrowCount >= limit) {
+        showNotification(`${name} has reached their borrowing limit (${limit} books).`, 'error');
+        return;
+      }
+
+      selectedBook.available--;
+      saveData('bookCatalog', cachedBookCatalog);
+      cachedBorrowedBooks.push({
+        id: Date.now().toString() + Math.random().toString(36).substring(2, 8),
+        name,
+        admAllover,
+        form: formLevel,
+        stream,
+        book: bookTitle,
+        type,
+        borrowDate,
+        returnDate,
+        status: 'Borrowed',
+        dateReturned: null
+      });
+      saveData('borrowedBooks', cachedBorrowedBooks);
+      borrowForm.reset();
+      borrowBookTypeInput.value = '';
+      borrowLimitInfo.textContent = '';
+      loadBorrowed();
+      loadBookCatalog();
+      loadDueReminders();
+      loadClassListWithBorrowedBooks(currentImportedLearners);
+      showNotification(`"${bookTitle}" successfully borrowed by ${name}!`, 'success');
+    }
+
+    // Borrowed Books Table
+    function loadBorrowed() {
+      tableBody.innerHTML = '';
+      const activeBorrows = cachedBorrowedBooks.filter(entry => entry.status === 'Borrowed');
+      const today = new Date().toISOString().split('T')[0];
+
+      if (activeBorrows.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="10">No books currently borrowed.</td></tr>`;
+        return;
+      }
+
+      activeBorrows.forEach(entry => {
+        const isOverdue = today > entry.returnDate;
+        const tr = document.createElement('tr');
+        tr.dataset.search = `${entry.name} ${entry.admAllover} ${entry.book} ${entry.type} ${entry.form} ${entry.stream}`.toLowerCase();
+        const returnButtonHtml = isLibrarianMode ? `<button onclick="returnBook('${entry.id}')">Returned</button>` : '';
+        tr.innerHTML = `
+          <td>${sanitizeInput(entry.name)}</td>
+          <td>${sanitizeInput(entry.admAllover || 'N/A')}</td>
+          <td>${sanitizeInput(entry.form)}</td>
+          <td>${sanitizeInput(entry.stream)}</td>
+          <td>${sanitizeInput(entry.book)}</td>
+          <td>${sanitizeInput(entry.type)}</td>
+          <td>${entry.borrowDate}</td>
+          <td>${entry.returnDate}</td>
+          <td class="${isOverdue ? 'overdue' : ''}">${isOverdue ? '⏰ Overdue' : '✅ Borrowed'}</td>
+          <td>${returnButtonHtml}</td>
+        `;
+        tableBody.appendChild(tr);
+      });
+      filterBorrowedBooks();
+    }
+
+    function returnBook(borrowId) {
+      if (!isLibrarianMode) {
+        showNotification('Access Denied: Only the librarian can mark books as returned.', 'error');
+        return;
+      }
+      const entryToReturn = cachedBorrowedBooks.find(entry => entry.id === borrowId);
+      if (!entryToReturn || entryToReturn.status === 'Returned') {
+        showNotification('This book has already been returned or record not found.', 'error');
+        return;
+      }
+      if (confirm(`Are you sure the book "${entryToReturn.book}" borrowed by "${entryToReturn.name}" (ADM: ${entryToReturn.admAllover || 'N/A'}) has been returned?`)) {
+        const bookInCatalog = cachedBookCatalog.find(book => book.title === entryToReturn.book);
+        if (bookInCatalog) {
+          bookInCatalog.available++;
+          saveData('bookCatalog', cachedBookCatalog);
+        } else {
+          console.warn(`Returned book "${entryToReturn.book}" not found in catalog.`);
+        }
+        entryToReturn.status = 'Returned';
+        entryToReturn.dateReturned = new Date().toISOString().split('T')[0];
+        saveData('borrowedBooks', cachedBorrowedBooks);
+        loadBorrowed();
+        loadBookCatalog();
+        loadDueReminders();
+        loadClassListWithBorrowedBooks(currentImportedLearners);
+        showNotification(`"${entryToReturn.book}" successfully returned by ${entryToReturn.name}!`, 'success');
+      }
+    }
+
     function filterBorrowedBooks() {
-      const searchTerm = borrowedSearchInput.value.toLowerCase().trim();
+      const searchTerm = borrowedSearchInput.value.toLowerCase();
       const rows = tableBody.getElementsByTagName('tr');
       for (let row of rows) {
-        const rowText = (row.dataset.search || '').toLowerCase();
+        if (row.cells.length <= 1) {
+          row.style.display = '';
+          continue;
+        }
+        const rowText = row.dataset.search || row.textContent.toLowerCase();
         row.style.display = rowText.includes(searchTerm) ? '' : 'none';
       }
     }
 
-    tableBody.addEventListener('click', (e) => {
-      if (e.target.classList.contains('return-book-btn')) {
-        const id = e.target.dataset.id;
-        if (!isLibrarianMode) {
-          showNotification('Access Denied: Only librarians can return books.', 'error');
-          return;
-        }
-        const borrowList = getData('borrowedBooks');
-        const entry = borrowList.find(entry => entry.id === id);
-        if (!entry || entry.status === 'Returned') {
-          showNotification('This book is already returned or not found.', 'error');
-          return;
-        }
-        if (confirm(`Return "${entry.book}" borrowed by ${entry.name} (ADM: ${entry.adm})?`)) {
-          const bookCatalog = getData('bookCatalog');
-          const book = bookCatalog.find(b => b.title === entry.book);
-          if (book) {
-            book.available++;
-          } else {
-            showNotification(`Book "${entry.book}" not found in catalog.`, 'error');
-            return;
-          }
-          entry.status = 'Returned';
-          entry.dateReturned = new Date().toISOString().split('T')[0];
-          if (saveData('borrowedBooks', borrowList) && saveData('bookCatalog', bookCatalog)) {
-            loadBorrowed();
-            loadBookCatalog();
-            loadDueReminders();
-            loadClassLists();
-            showNotification(`"${entry.book}" returned by ${entry.name}.`, 'success');
-          } else {
-            showNotification('Failed to return book. Please try again.', 'error');
-          }
-        }
+    // Learner History
+    function loadLearnerHistory() {
+      const searchTerm = sanitizeInput(learnerSearchInput.value.toLowerCase().trim());
+      learnerHistoryTableBody.innerHTML = '';
+      if (!searchTerm) {
+        learnerHistoryTableBody.innerHTML = `<tr><td colspan="8">Search for a learner to view their history.</td></tr>`;
+        return;
       }
-    });
+      const filteredHistory = cachedBorrowedBooks
+        .filter(entry => entry.name.toLowerCase().includes(searchTerm) || (entry.admAllover && entry.admAllover.toLowerCase().includes(searchTerm)))
+        .sort((a, b) => new Date(b.borrowDate) - new Date(a.borrowDate));
+      if (filteredHistory.length === 0) {
+        learnerHistoryTableBody.innerHTML = `<tr><td colspan="8">No history found for "${searchTerm}".</td></tr>`;
+        return;
+      }
+      filteredHistory.forEach(entry => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${sanitizeInput(entry.name)}</td>
+          <td>${sanitizeInput(entry.admAllover || 'N/A')}</td>
+          <td>${sanitizeInput(entry.book)}</td>
+          <td>${sanitizeInput(entry.type)}</td>
+          <td>${entry.borrowDate}</td>
+          <td>${entry.returnDate}</td>
+          <td>${entry.status === 'Returned' ? (entry.dateReturned || 'N/A') : 'Still Borrowed'}</td>
+          <td class="${entry.status === 'Overdue' ? 'overdue' : ''}">${entry.status}</td>
+        `;
+        learnerHistoryTableBody.appendChild(tr);
+      });
+    }
 
     // Due Reminders
     function loadDueReminders() {
-      const borrowList = getData('borrowedBooks');
+      dueRemindersList.innerHTML = '';
       const today = new Date();
       const todayStr = today.toISOString().split('T')[0];
       const threeDaysLater = new Date(today.getTime() + 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
-      dueRemindersList.innerHTML = '';
-
-      const relevantBooks = borrowList.filter(entry => {
-        if (entry.status === 'Returned') return false;
-        return entry.returnDate <= threeDaysLater;
-      }).sort((a, b) => a.returnDate.localeCompare(b.returnDate));
-
+      const relevantBooks = cachedBorrowedBooks
+        .filter(entry => {
+          if (entry.status === 'Returned') return false;
+          const returnDate = entry.returnDate;
+          return returnDate <= threeDaysLater;
+        })
+        .sort((a, b) => new Date(a.returnDate) - new Date(b.returnDate));
       if (relevantBooks.length === 0) {
-        dueRemindersList.innerHTML = '<li>No books overdue or due soon.</li>';
+        dueRemindersList.innerHTML = '<li>No books overdue or due in the next 3 days.</li>';
         return;
       }
-
       relevantBooks.forEach(entry => {
         const li = document.createElement('li');
+        const returnDate = new Date(entry.returnDate);
         let statusText = '';
         let statusClass = '';
-        if (todayStr > entry.returnDate) {
-          const returnDate = new Date(entry.returnDate);
+        if (entry.returnDate < todayStr) {
           const diffDays = Math.ceil((today - returnDate) / (1000 * 60 * 60 * 24));
           statusText = `OVERDUE by ${diffDays} day${diffDays > 1 ? 's' : ''}!`;
           statusClass = 'overdue-item';
@@ -1483,81 +1264,341 @@
           statusText = `DUE TODAY!`;
           statusClass = 'due-soon-item';
         } else {
-          const returnDate = new Date(entry.returnDate);
           const diffDays = Math.ceil((returnDate - today) / (1000 * 60 * 60 * 24));
           statusText = `Due in ${diffDays} day${diffDays > 1 ? 's' : ''}`;
           statusClass = 'due-soon-item';
         }
         li.innerHTML = `
-          <span><strong>${entry.book}</strong> by ${entry.name} (ADM: ${entry.adm}, ${entry.form} ${entry.stream}) - Due: ${entry.returnDate}</span>
+          <span><strong>${sanitizeInput(entry.book)}</strong> by ${sanitizeInput(entry.name)} (ADM: ${sanitizeInput(entry.admAllover || 'N/A')}, Form ${entry.form} ${sanitizeInput(entry.stream)}) - Due: ${entry.returnDate}</span>
           <span class="${statusClass}">${statusText}</span>
         `;
         dueRemindersList.appendChild(li);
       });
     }
 
-    // Learner History
-    function loadLearnerHistory() {
-      const searchTerm = learnerSearchInput.value.toLowerCase().trim();
-      const formFilter = filterHistoryFormLevelSelect.value;
-      const streamFilter = filterHistoryStreamSelect.value.trim();
-      const borrowList = getData('borrowedBooks');
-      const classLists = getData('classLists');
-      learnerHistoryTableBody.innerHTML = '';
-
-      let filteredByClass = borrowList;
-      if (formFilter || streamFilter) {
-        let studentsInClass = new Set();
-        classLists.forEach(cl => {
-          const formMatch = !formFilter || cl.form === formFilter;
-          const streamMatch = !streamFilter || cl.stream.toLowerCase().includes(streamFilter.toLowerCase());
-          if (formMatch && streamMatch) {
-            cl.students.forEach(student => studentsInClass.add(`${student.name.toLowerCase()}|${student.adm.toLowerCase()}`));
-          }
-        });
-        filteredByClass = borrowList.filter(entry => 
-          studentsInClass.has(`${entry.name.toLowerCase()}|${entry.adm.toLowerCase()}`)
-        );
-        if (studentsInClass.size === 0 && (formFilter || streamFilter)) {
-          learnerHistoryTableBody.innerHTML = '<tr><td colspan="10">No students found for selected filters.</td></tr>';
-          return;
-        }
-      }
-
-      const finalFilteredHistory = filteredByClass.filter(entry => 
-        entry.name.toLowerCase().includes(searchTerm) || entry.adm.toLowerCase().includes(searchTerm)
-      ).sort((a, b) => b.borrowDate.localeCompare(a.borrowDate));
-
-      if (finalFilteredHistory.length === 0) {
-        learnerHistoryTableBody.innerHTML = `<tr><td colspan="10">No history found for "${searchTerm}" with current filters.</td></tr>`;
+    // Excel Import and Class List Management
+    function importExcelFile(file) {
+      if (!file) {
+        saveClassListDiv.classList.add('hidden');
         return;
       }
+      const reader = new FileReader();
+      reader.onload = e => {
+        try {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const firstSheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[firstSheetName];
+          const jsonSheet = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+          if (jsonSheet.length === 0) {
+            showNotification('The Excel file is empty or could not be parsed.', 'error');
+            classListTableBody.innerHTML = `<tr><td colspan="3">The Excel file is empty or could not be parsed.</td></tr>`;
+            saveClassListDiv.classList.add('hidden');
+            currentImportedLearners = [];
+            return;
+          }
+          const headerRow = jsonSheet[0];
+          const possibleNameHeaders = ['name', 'learner name', 'student name', 'fullname', 'student'];
+          const nameColumnIndex = headerRow.findIndex(header => possibleNameHeaders.includes(String(header).toLowerCase().trim()));
+          if (nameColumnIndex === -1) {
+            showNotification('No "Name" or "Learner Name" column found in Excel file.', 'error');
+            classListTableBody.innerHTML = `<tr><td colspan="3">Could not find "Name" column in Excel.</td></tr>`;
+            saveClassListDiv.classList.add('hidden');
+            currentImportedLearners = [];
+            return;
+          }
+          currentImportedLearners = jsonSheet.slice(1)
+            .map(row => String(row[nameColumnIndex]).trim())
+            .filter(name => name);
+          if (currentImportedLearners.length === 0) {
+            showNotification('No learner names found in the Excel file.', 'error');
+            classListTableBody.innerHTML = `<tr><td colspan="3">No learner names found in the Excel file.</td></tr>`;
+            saveClassListDiv.classList.add('hidden');
+            return;
+          }
+          showNotification(`Successfully imported ${currentImportedLearners.length} learners from "${file.name}".`, 'success');
+          loadClassListWithBorrowedBooks(currentImportedLearners);
+          saveClassListDiv.classList.remove('hidden');
+          classListNameInput.value = '';
+        } catch (e) {
+          showNotification('Error parsing Excel file. Please ensure it is a valid .xlsx or .xls file.', 'error');
+          console.error('Excel parsing error:', e);
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    }
 
-      finalFilteredHistory.forEach(entry => {
-        const todayStr = new Date().toISOString().split('T')[0];
-        const isOverdue = todayStr > entry.returnDate && entry.status !== 'Returned';
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${entry.name}</td>
-          <td>${entry.adm}</td>
-          <td>${entry.form}</td>
-          <td>${entry.stream}</td>
-          <td>${entry.book}</td>
-          <td>${entry.type}</td>
-          <td>${entry.borrowDate}</td>
-          <td>${entry.returnDate}</td>
-          <td>${entry.status === 'Returned' ? (entry.dateReturned || 'N/A') : 'Still Borrowed'}</td>
-          <td class="${isOverdue ? 'overdue' : ''}">${isOverdue ? 'Overdue' : entry.status}</td>
-        `;
-        learnerHistoryTableBody.appendChild(tr);
+    function saveClassList() {
+      const listName = sanitizeInput(classListNameInput.value.trim());
+      if (!listName) {
+        showNotification('Please enter a name for this class list.', 'error');
+        return;
+      }
+      if (currentImportedLearners.length === 0) {
+        showNotification('No class list imported to save.', 'error');
+        return;
+      }
+      const savedClassLists = getData('savedClassLists');
+      if (savedClassLists[listName] && !confirm(`A class list named "${listName}" already exists. Do you want to overwrite it?`)) {
+        return;
+      }
+      savedClassLists[listName] = currentImportedLearners;
+      saveData('savedClassLists', savedClassLists);
+      showNotification(`Class list "${listName}" saved successfully!`, 'success');
+      classListNameInput.value = '';
+      saveClassListDiv.classList.add('hidden');
+      excelFileInput.value = '';
+      loadSavedClassListButtons();
+    }
+
+    function loadSavedClassListButtons() {
+      savedClassListsContainer.innerHTML = '';
+      const savedLists = getData('savedClassLists');
+      const listNames = Object.keys(savedLists).sort();
+      if (listNames.length === 0) {
+        savedClassListsContainer.innerHTML = 'No saved class lists.';
+        return;
+      }
+      listNames.forEach(name => {
+        const buttonWrapper = document.createElement('div');
+        buttonWrapper.style.display = 'flex';
+        buttonWrapper.style.alignItems = 'center';
+        buttonWrapper.style.marginBottom = '5px';
+        const loadBtn = document.createElement('button');
+        loadBtn.textContent = name;
+        loadBtn.onclick = () => {
+          currentImportedLearners = savedLists[name];
+          loadClassListWithBorrowedBooks(currentImportedLearners);
+        };
+        buttonWrapper.appendChild(loadBtn);
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = 'X';
+        deleteBtn.classList.add('delete-btn');
+        deleteBtn.title = `Delete ${name}`;
+        deleteBtn.onclick = e => {
+          e.stopPropagation();
+          deleteClassList(name);
+        };
+        buttonWrapper.appendChild(deleteBtn);
+        savedClassListsContainer.appendChild(buttonWrapper);
       });
     }
 
+    function deleteClassList(listName) {
+      if (!isLibrarianMode) {
+        showNotification('Access Denied: Only the librarian can delete class lists.', 'error');
+        return;
+      }
+      if (confirm(`Are you sure you want to delete the class list "${listName}"?`)) {
+        const savedLists = getData('savedClassLists');
+        delete savedLists[listName];
+        saveData('savedClassLists', savedLists);
+        showNotification(`Class list "${listName}" deleted successfully.`, 'success');
+        loadSavedClassListButtons();
+        if (currentImportedLearners.length > 0 && !savedLists[listName]) {
+          currentImportedLearners = [];
+          classListTableBody.innerHTML = `<tr><td colspan="3">Class list cleared. Load another list or upload a new one.</td></tr>`;
+        }
+      }
+    }
+
+    function loadClassListWithBorrowedBooks(learnersToDisplay) {
+      classListTableBody.innerHTML = '<tr><td colspan="3">Loading class list...</td></tr>';
+      if (!learnersToDisplay || learnersToDisplay.length === 0) {
+        classListTableBody.innerHTML = `<tr><td colspan="3">Upload an Excel file to see class list, or load a saved list.</td></tr>`;
+        return;
+      }
+      learnersToDisplay.sort((a, b) => a.localeCompare(b));
+      classListTableBody.innerHTML = '';
+      learnersToDisplay.forEach(learnerName => {
+        const tr = document.createElement('tr');
+        tr.dataset.learnerName = learnerName.toLowerCase();
+        const learnerCell = document.createElement('td');
+        learnerCell.textContent = sanitizeInput(learnerName);
+        tr.appendChild(learnerCell);
+        const borrowedBooksCell = document.createElement('td');
+        const statusCell = document.createElement('td');
+        const learnerBorrowedBooks = cachedBorrowedBooks.filter(
+          book => book.name.toLowerCase() === learnerName.toLowerCase() && book.status === 'Borrowed'
+        );
+        if (learnerBorrowedBooks.length > 0) {
+          const ul = document.createElement('ul');
+          ul.style.listStyle = 'none';
+          ul.style.padding = '0';
+          ul.style.margin = '0';
+          let hasOverdue = false;
+          const today = new Date().toISOString().split('T')[0];
+          learnerBorrowedBooks.forEach(book => {
+            const li = document.createElement('li');
+            li.classList.add('borrowed-book-item');
+            const isOverdue = today > book.returnDate;
+            if (isOverdue) hasOverdue = true;
+            li.innerHTML = `
+              <span>
+                <strong>${sanitizeInput(book.book)}</strong> (Due: ${book.returnDate})
+                ${isOverdue ? '<span style="color:red; font-weight:bold;"> (OVERDUE)</span>' : ''}
+              </span>
+              ${isLibrarianMode ? `<button onclick="returnBook('${book.id}')">Returned</button>` : ''}
+            `;
+            ul.appendChild(li);
+          });
+          borrowedBooksCell.appendChild(ul);
+          statusCell.textContent = hasOverdue ? 'Overdue Books' : 'Books Borrowed';
+          statusCell.style.color = hasOverdue ? 'red' : 'green';
+        } else {
+          borrowedBooksCell.innerHTML = '<span class="no-books-borrowed">No books currently borrowed.</span>';
+          statusCell.textContent = 'No Books Borrowed';
+          statusCell.style.color = '#777';
+        }
+        tr.appendChild(borrowedBooksCell);
+        tr.appendChild(statusCell);
+        classListTableBody.appendChild(tr);
+      });
+    }
+
+    // Export to Excel
+    function exportToExcel() {
+      const ws = XLSX.utils.json_to_sheet(cachedBorrowedBooks);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Borrowed Books');
+      XLSX.write(wb, 'borrowed_books.xlsx');
+      showNotification('Borrowed books exported to Excel successfully.', 'success');
+    }
+
+    // Table Sorting
+    function sortTable(columnIndex, tableId) {
+      const table = document.getElementById(tableId);
+      const rows = Array.from(table.querySelector('tbody').rows);
+      const isAscending = table.dataset.sortOrder !== 'asc';
+      rows.sort((a, b) => {
+        let aValue = a.cells[columnIndex].textContent;
+        let bValue = b.cells[columnIndex].textContent;
+        if (columnIndex === 6 || columnIndex === 7) { // Date columns
+          aValue = new Date(aValue);
+          bValue = new Date(bValue);
+        }
+        return isAscending ? aValue.localeCompare(bValue, undefined, { numeric: true }) : bValue.localeCompare(aValue, undefined, { numeric: true });
+      });
+      table.querySelector('tbody').innerHTML = '';
+      rows.forEach(row => table.querySelector('tbody').appendChild(row));
+      table.dataset.sortOrder = isAscending ? 'asc' : 'desc';
+      const headers = table.querySelectorAll('th');
+      headers.forEach((th, index) => {
+        th.classList.remove('sort-asc', 'sort-desc');
+        if (index === columnIndex) {
+          th.classList.add(isAscending ? 'sort-asc' : 'sort-desc');
+        }
+      });
+    }
+
+    // Navigation
+    function logout() {
+      isLibrarianMode = false;
+      libraryContent.style.display = 'none';
+      loginScreen.style.display = 'flex';
+      accessPasswordInput.value = '';
+      loginButton.classList.remove('hidden');
+      enterLibraryButton.classList.add('hidden');
+      hideAllContentSections();
+      initialButtonsDiv.classList.remove('hidden');
+      navigationDiv.classList.add('hidden');
+    }
+
+    function showNavigation() {
+      navigationDiv.classList.remove('hidden');
+    }
+
+    // Login Logic
+    async function verifyMasterPassword(password) {
+      // TODO: Replace with backend API call for secure authentication
+      // Example:
+      // const response = await fetch('/api/verify-password', {
+      //   method: 'POST',
+      //   body: JSON.stringify({ password, type: 'master' }),
+      //   headers: { 'Content-Type': 'application/json' }
+      // });
+      // return response.ok;
+      return password === MASTER_PASSWORD;
+    }
+
+    async function verifyLibrarianPassword(password) {
+      // TODO: Replace with backend API call
+      return password === LIBRARIAN_PASSWORD;
+    }
+
+    async function verifyBorrowPassword(password) {
+      // TODO: Replace with backend API call
+      return password === BORROW_PASSWORD;
+    }
+
+    // Wallpaper
+    function loadSavedWallpaper() {
+      const savedWallpaper = localStorage.getItem('savedWallpaper');
+      if (savedWallpaper) {
+        document.body.style.backgroundImage = `url('${savedWallpaper}')`;
+        document.body.style.backgroundColor = 'transparent';
+        wallpaperFileNameSpan.textContent = 'Previously chosen file';
+      } else {
+        document.body.style.backgroundImage = `url('https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Flag_of_Kenya.svg/1280px-Flag_of_Kenya.svg.png')`;
+        wallpaperFileNameSpan.textContent = 'No file chosen';
+      }
+    }
+
     // Event Listeners
-    librarianLoginBtn.addEventListener('click', () => {
+    loginButton.addEventListener('click', async () => {
+      const password = accessPasswordInput.value;
+      if (await verifyMasterPassword(password)) {
+        loginErrorMessage.classList.add('hidden');
+        loginButton.classList.add('hidden');
+        enterLibraryButton.classList.remove('hidden');
+      } else {
+        loginErrorMessage.classList.remove('hidden');
+        accessPasswordInput.value = '';
+      }
+    });
+
+    enterLibraryButton.addEventListener('click', () => {
+      loginScreen.style.display = 'none';
+      libraryContent.style.display = 'block';
+      hideAllContentSections();
+      initialButtonsDiv.classList.remove('hidden');
+    });
+
+    accessPasswordInput.addEventListener('keypress', e => {
+      if (e.key === 'Enter') loginButton.click();
+    });
+
+    customWallpaperButton.addEventListener('click', () => {
+      wallpaperInput.click();
+    });
+
+    wallpaperInput.addEventListener('change', event => {
+      const file = event.target.files[0];
+      if (file) {
+        if (file.size > 2 * 1024 * 1024) { // Limit to 2MB
+          showNotification('Image size must be less than 2MB.', 'error');
+          wallpaperInput.value = '';
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = e => {
+          const imageUrl = e.target.result;
+          document.body.style.backgroundImage = `url('${imageUrl}')`;
+          document.body.style.backgroundColor = 'transparent';
+          localStorage.setItem('savedWallpaper', imageUrl);
+          wallpaperFileNameSpan.textContent = file.name;
+        };
+        reader.readAsDataURL(file);
+      } else {
+        wallpaperFileNameSpan.textContent = 'No file chosen';
+      }
+    });
+
+    librarianLoginBtn.addEventListener('click', async () => {
       const password = prompt('Enter librarian password:');
-      if (password === LIBRARIAN_PASSWORD) {
+      if (await verifyLibrarianPassword(password)) {
         isLibrarianMode = true;
+        initialButtonsDiv.classList.add('hidden');
         hideAllContentSections();
         notesSection.classList.remove('hidden');
         librarianToolsSection.classList.remove('hidden');
@@ -1565,92 +1606,102 @@
         borrowedLogSection.classList.remove('hidden');
         dueRemindersSection.classList.remove('hidden');
         learnerHistorySection.classList.remove('hidden');
-        backButton.style.display = 'block';
+        showNavigation();
         loadMembers();
         loadBookCatalog();
-        loadClassLists();
         loadBorrowed();
         loadDueReminders();
+        loadSavedClassListButtons();
+        loadClassListWithBorrowedBooks(currentImportedLearners);
         learnerSearchInput.value = '';
         borrowedSearchInput.value = '';
         loadLearnerHistory();
       } else {
-        showNotification('Incorrect librarian password.', 'error');
+        showNotification('Incorrect librarian password. Access denied.', 'error');
       }
     });
 
-    borrowBookBtn.addEventListener('click', () => {
-      const password = prompt('Enter borrowing password:');
-      if (password === BORROW_PASSWORD) {
+    borrowBookBtn.addEventListener('click', async () => {
+      const password = prompt('Enter password to borrow a book:');
+      if (await verifyBorrowPassword(password)) {
         isLibrarianMode = false;
+        initialButtonsDiv.classList.add('hidden');
         hideAllContentSections();
         notesSection.classList.remove('hidden');
         borrowFormSection.classList.remove('hidden');
         borrowedLogSection.classList.remove('hidden');
         dueRemindersSection.classList.remove('hidden');
-        backButton.style.display = 'block';
+        showNavigation();
         loadBookCatalog();
         loadBorrowed();
         loadDueReminders();
         borrowedSearchInput.value = '';
       } else {
-        showNotification('Incorrect borrowing password.', 'error');
+        showNotification('Incorrect borrow password. Access denied.', 'error');
       }
     });
 
-    databaseBtn.addEventListener('click', () => {
-      const password = prompt('Enter database password:');
-      if (password === DATABASE_PASSWORD) {
+    databaseBtn.addEventListener('click', async () => {
+      const password = prompt('Enter librarian password to access Database:');
+      if (await verifyLibrarianPassword(password)) {
         isLibrarianMode = false;
+        initialButtonsDiv.classList.add('hidden');
         hideAllContentSections();
         borrowedLogSection.classList.remove('hidden');
         dueRemindersSection.classList.remove('hidden');
         learnerHistorySection.classList.remove('hidden');
-        backButton.style.display = 'block';
+        showNavigation();
         loadBorrowed();
         loadDueReminders();
-        loadClassLists();
+        loadSavedClassListButtons();
+        loadClassListWithBorrowedBooks(currentImportedLearners);
         learnerSearchInput.value = '';
         borrowedSearchInput.value = '';
         loadLearnerHistory();
       } else {
-        showNotification('Incorrect database password.', 'error');
+        showNotification('Incorrect database password. Access denied.', 'error');
       }
     });
 
-    backButton.addEventListener('click', showInitialMenu);
-
-    loginButton.addEventListener('click', () => {
-      if (accessPasswordInput.value === MASTER_PASSWORD) {
-        loginScreen.style.display = 'none';
-        libraryContent.style.display = 'block';
-        showInitialMenu();
-      } else {
-        loginErrorMessage.style.display = 'block';
-        accessPasswordInput.value = '';
-      }
-    });
-
-    accessPasswordInput.addEventListener('keypress', e => {
-      if (e.key === 'Enter') {
-        loginButton.click();
-      }
-    });
-
+    addMemberBtn.addEventListener('click', addMember);
+    addBookToCatalogBtn.addEventListener('click', addBookToCatalog);
+    borrowBookTitleSelect.addEventListener('change', updateBorrowBookType);
+    nameInput.addEventListener('input', updateBorrowLimitInfo);
+    borrowForm.addEventListener('submit', borrowBook);
     borrowedSearchInput.addEventListener('keyup', debounce(filterBorrowedBooks, 300));
     learnerSearchInput.addEventListener('keyup', debounce(loadLearnerHistory, 300));
-    filterHistoryFormLevelSelect.addEventListener('change', () => {
-      filterHistoryFormLevelSelect.dataset.currentValue = filterHistoryFormLevelSelect.value;
-      loadLearnerHistory();
+    excelFileInput.addEventListener('change', e => importExcelFile(e.target.files[0]));
+    resetExcelInputBtn.addEventListener('click', () => {
+      excelFileInput.value = '';
+      saveClassListDiv.classList.add('hidden');
+      currentImportedLearners = [];
+      classListTableBody.innerHTML = `<tr><td colspan="3">Upload an Excel file to see class list, or load a saved list.</td></tr>`;
     });
-    filterHistoryStreamSelect.addEventListener('change', () => {
-      filterHistoryStreamSelect.dataset.currentValue = filterHistoryStreamSelect.value;
-      loadLearnerHistory();
+    saveClassListBtn.addEventListener('click', saveClassList);
+    exportBorrowedBtn.addEventListener('click', exportToExcel);
+
+    document.getElementById('backBtn').addEventListener('click', () => {
+      hideAllContentSections();
+      initialButtonsDiv.classList.remove('hidden');
+      navigationDiv.classList.add('hidden');
     });
 
+    document.getElementById('logoutBtn').addEventListener('click', logout);
+
+    document.getElementById('borrowedBooksTable').querySelectorAll('th').forEach((th, index) => {
+      if (index < 9) { // Exclude the Return button column
+        th.addEventListener('click', () => sortTable(index, 'borrowedBooksTable'));
+      }
+    });
+
+    // Initialize
     window.onload = () => {
       loginScreen.style.display = 'flex';
       libraryContent.style.display = 'none';
+      initializeData();
+      loadSavedWallpaper();
+      loadClassListWithBorrowedBooks(currentImportedLearners);
+      loadSavedClassListButtons();
     };
   </script>
 </body>
