@@ -675,7 +675,7 @@
     <div id="borrowed-log-section" class="hidden">
       <h2 style="text-align:center;">📖 Borrowed Books Log</h2>
       <input type="text" id="borrowedSearchInput" placeholder="Search borrowed books (learner, book title, etc.)" aria-label="Search borrowed books">
-      <button id="exportBorrowedBtn">Export to Excel</buttonoload
+      <button id="exportBorrowedBtn">Export to Excel</button>
       <table id="borrowedBooksTable">
         <thead>
           <tr>
@@ -862,15 +862,15 @@
       if (!localStorage.getItem('members')) {
         saveData('members', ['John Doe', 'Jane Smith', 'Alice Green']);
       }
-     if (!localStorage.getItem('bookCatalog')) {
-      saveData('bookCatalog', [
-        { title: 'The River and the Source', type: 'Novel', quantity: 5, available: 5 },
-        { title: 'Advanced Mathematics 1', type: 'Textbook', quantity: 3, available: 3 },
-        { title: 'Chemistry Form 4', type: 'Textbook', quantity: 4, available: 4 },
-        { title: 'Introduction to Python', type: 'Reference', quantity: 2, available: 2 },
-        { title: 'Physics Form 3', type: 'Textbook', quantity: 1, available: 1 }
-      ]);
-    }
+      if (!localStorage.getItem('bookCatalog')) {
+        saveData('bookCatalog', [
+          { title: 'The River and the Source', type: 'Novel', quantity: 5, available: 5 },
+          { title: 'Advanced Mathematics 1', type: 'Textbook', quantity: 3, available: 3 },
+          { title: 'Chemistry Form 4', type: 'Textbook', quantity: 4, available: 4 },
+          { title: 'Introduction to Python', type: 'Reference', quantity: 2, available: 2 },
+          { title: 'Physics Form 3', type: 'Textbook', quantity: 1, available: 1 }
+        ]);
+      }
       if (!localStorage.getItem('savedClassLists')) {
         saveData('savedClassLists', {});
       }
@@ -954,14 +954,21 @@
     function loadBookCatalog() {
       bookCatalogListUl.innerHTML = '';
       borrowBookTitleSelect.innerHTML = '<option value="">-- Select Book Title --</option>';
+      // Preserve static book types from HTML and add unique types from catalog
+      const staticBookTypes = ['Textbook', 'Novel', 'Reference', 'Journal'];
+      const catalogBookTypes = [...new Set(cachedBookCatalog.map(book => book.type))];
+      const allBookTypes = [...new Set([...staticBookTypes, ...catalogBookTypes])].sort();
+      
+      // Clear existing options but keep the placeholder
       newBookTypeSelect.innerHTML = '<option value="">-- Book Type --</option>';
-      const uniqueBookTypes = [...new Set(cachedBookCatalog.map(book => book.type))].sort();
-      uniqueBookTypes.forEach(type => {
+      // Populate dropdown with all unique book types
+      allBookTypes.forEach(type => {
         const option = document.createElement('option');
         option.value = type;
         option.textContent = type;
-        newBookTypeSelect.appendChild(option.cloneNode(true));
+        newBookTypeSelect.appendChild(option);
       });
+
       if (cachedBookCatalog.length === 0) {
         bookCatalogListUl.innerHTML = '<li>No books in catalog yet.</li>';
       } else {
@@ -1511,13 +1518,6 @@
     // Login Logic
     async function verifyMasterPassword(password) {
       // TODO: Replace with backend API call for secure authentication
-      // Example:
-      // const response = await fetch('/api/verify-password', {
-      //   method: 'POST',
-      //   body: JSON.stringify({ password, type: 'master' }),
-      //   headers: { 'Content-Type': 'application/json' }
-      // });
-      // return response.ok;
       return password === MASTER_PASSWORD;
     }
 
