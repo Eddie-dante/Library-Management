@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ngatho Secondary School Library</title>
   <style>
-    /* Ensure HTML and BODY take full height for background image */
+    /* Existing CSS remains unchanged */
     html, body {
       height: 100%;
       margin: 0;
@@ -18,8 +18,6 @@
       background-position: center center;
       background-attachment: fixed;
     }
-
-    /* Notification styles */
     .notification {
       position: fixed;
       top: 20px;
@@ -33,13 +31,11 @@
     }
     .notification.error { background-color: #f44336; }
     .notification.success { background-color: #4CAF50; }
-
     #library-content {
       display: none;
       height: 100%;
       overflow-y: auto;
     }
-
     #login-screen {
       position: fixed;
       top: 0;
@@ -53,7 +49,6 @@
       z-index: 1000;
       flex-direction: column;
     }
-
     #login-form-container {
       background-color: white;
       padding: 40px;
@@ -63,12 +58,10 @@
       max-width: 400px;
       width: 90%;
     }
-
     #login-form-container h2 {
       color: #004D40;
       margin-bottom: 25px;
     }
-
     #login-form-container input[type="password"] {
       width: calc(100% - 20px);
       padding: 12px;
@@ -77,7 +70,6 @@
       border-radius: 5px;
       font-size: 1.1rem;
     }
-
     #login-form-container button {
       background-color: #004D40;
       color: white;
@@ -89,18 +81,15 @@
       transition: background-color 0.3s ease;
       margin: 5px;
     }
-
     #login-form-container button:hover {
       background-color: #26A69A;
     }
-
     #login-error-message {
       color: red;
       margin-top: 15px;
       font-weight: bold;
       display: none;
     }
-
     #wallpaper-upload-section {
       margin-top: 20px;
       padding-top: 15px;
@@ -144,20 +133,17 @@
       white-space: nowrap;
       text-overflow: ellipsis;
     }
-
     header {
       background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1521587765099-efb676f188ec?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') center center / cover no-repeat;
       color: white;
       text-align: center;
       padding: 20px;
     }
-
     #initial-buttons {
       text-align: center;
       margin-top: 50px;
       padding: 20px;
     }
-
     #initial-buttons button {
       padding: 15px 30px;
       font-size: 1.2rem;
@@ -168,14 +154,12 @@
       transition: background-color 0.3s ease, transform 0.2s ease;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
-
     #initial-buttons #librarianLoginBtn { background-color: #004D40; color: white; }
     #initial-buttons #librarianLoginBtn:hover { background-color: #26A69A; transform: translateY(-2px); }
     #initial-buttons #borrowBookBtn { background-color: #66BB6A; color: white; }
     #initial-buttons #borrowBookBtn:hover { background-color: #81C784; transform: translateY(-2px); }
     #initial-buttons #databaseBtn { background-color: #42A5F5; color: white; }
     #initial-buttons #databaseBtn:hover { background-color: #64B5F6; transform: translateY(-2px); }
-
     #navigation button {
       padding: 10px 20px;
       margin: 5px;
@@ -187,7 +171,6 @@
       transition: background-color 0.3s ease;
     }
     #navigation button:hover { background-color: #26A69A; }
-
     form {
       max-width: 600px;
       background-color: rgba(255, 255, 255, 0.95);
@@ -196,7 +179,6 @@
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       border-radius: 8px;
     }
-
     input, select, button {
       width: 100%;
       padding: 10px;
@@ -206,11 +188,9 @@
       border-radius: 4px;
       box-sizing: border-box;
     }
-
     input[type="number"] {
       width: calc(100% - 20px);
     }
-
     form button[type="submit"] {
       background-color: #004D40;
       color: white;
@@ -218,11 +198,9 @@
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
-
     form button[type="submit"]:hover {
       background-color: #26A69A;
     }
-
     table {
       width: 95%;
       margin: 20px auto;
@@ -230,21 +208,17 @@
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
       background-color: rgba(255, 255, 255, 0.9);
     }
-
     th, td {
       padding: 10px;
       border: 1px solid #e0e0e0;
       text-align: center;
     }
-
     th {
       background-color: #f5f5f5;
       cursor: pointer;
     }
-
     th.sort-asc::after { content: ' ↑'; }
     th.sort-desc::after { content: ' ↓'; }
-
     table button {
       width: auto;
       padding: 5px 10px;
@@ -256,17 +230,14 @@
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
-
     table button:hover {
       background-color: #26A69A;
     }
-
     .overdue {
       background-color: #ffdddd;
       color: #CC0000;
       font-weight: bold;
     }
-
     .notes {
       font-size: 0.95rem;
       background-color: rgba(247, 247, 247, 0.9);
@@ -277,15 +248,12 @@
       color: #333;
       border-radius: 4px;
     }
-
     .notes strong {
       color: #004D40;
     }
-
     .hidden {
       display: none;
     }
-
     .librarian-section {
       max-width: 600px;
       background-color: rgba(255, 255, 255, 0.95);
@@ -295,7 +263,6 @@
       border-radius: 8px;
       border-top: 5px solid #004D40;
     }
-
     .librarian-section h3 {
       color: #004D40;
       text-align: center;
@@ -303,7 +270,6 @@
       padding-bottom: 10px;
       border-bottom: 1px solid #eee;
     }
-
     .librarian-section ul {
       list-style: none;
       padding: 0;
@@ -312,7 +278,6 @@
       border: 1px solid #eee;
       border-radius: 4px;
     }
-
     .librarian-section ul li {
       padding: 8px 10px;
       border-bottom: 1px solid #f5f5f5;
@@ -321,27 +286,22 @@
       align-items: center;
       background-color: #fff;
     }
-
     .librarian-section ul li:last-child {
       border-bottom: none;
     }
-
     .librarian-section input[type="text"],
     .librarian-section input[type="number"],
     .librarian-section select,
     .librarian-section button {
       margin-bottom: 5px;
     }
-
     .librarian-section button {
       background-color: #004D40;
       color: white;
     }
-
     .librarian-section button:hover {
       background-color: #26A69A;
     }
-
     #borrowedSearchInput, #learnerSearchInput {
       width: calc(95% - 22px);
       margin: 10px auto;
@@ -351,20 +311,17 @@
       border-radius: 4px;
       box-sizing: border-box;
     }
-
     .low-stock {
       background-color: #ffe0b2;
       border-left: 5px solid #ff9800;
       font-weight: bold;
     }
-
     .out-of-stock {
       background-color: #ffcccc;
       border-left: 5px solid #cc0000;
       font-weight: bold;
       color: #cc0000;
     }
-
     #due-reminders-section {
       max-width: 700px;
       background-color: rgba(255, 255, 255, 0.95);
@@ -374,7 +331,6 @@
       border-radius: 8px;
       border-top: 5px solid #E91E63;
     }
-
     #due-reminders-section h3 {
       color: #E91E63;
       text-align: center;
@@ -382,7 +338,6 @@
       padding-bottom: 10px;
       border-bottom: 1px solid #eee;
     }
-
     #due-reminders-section ul {
       list-style: none;
       padding: 0;
@@ -391,7 +346,6 @@
       border: 1px solid #eee;
       border-radius: 4px;
     }
-
     #due-reminders-section ul li {
       padding: 8px 10px;
       border-bottom: 1px solid #f5f5f5;
@@ -400,20 +354,16 @@
       align-items: center;
       background-color: #fff;
     }
-
     #due-reminders-section ul li:last-child {
       border-bottom: none;
     }
-
     #due-reminders-section .overdue-item {
       color: #CC0000;
-      font-weight: bold;
+      form: bold;
     }
-
     #due-reminders-section .due-soon-item {
       color: #FF5722;
     }
-
     #excel-import-section {
       max-width: 90%;
       background-color: rgba(255, 255, 255, 0.95);
@@ -423,7 +373,6 @@
       border-radius: 8px;
       border-top: 5px solid #FFC107;
     }
-
     #excel-import-section h3 {
       color: #FFC107;
       text-align: center;
@@ -431,7 +380,6 @@
       padding-bottom: 10px;
       border-bottom: 1px solid #eee;
     }
-
     #class-list-table-container {
       max-height: 400px;
       overflow-y: auto;
@@ -439,37 +387,31 @@
       border: 1px solid #ddd;
       border-radius: 4px;
     }
-
     #class-list-table {
       width: 100%;
       margin: 0;
       box-shadow: none;
     }
-
     #class-list-table thead th {
       position: sticky;
       top: 0;
       background-color: #f0f0f0;
       z-index: 1;
     }
-
     #class-list-table td {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       max-width: 150px;
     }
-
     #class-list-table td:nth-child(1) {
       font-weight: bold;
       min-width: 150px;
     }
-
     #class-list-table td:nth-child(2) {
       text-align: left;
       min-width: 250px;
     }
-
     .borrowed-book-item {
       display: flex;
       justify-content: space-between;
@@ -477,23 +419,19 @@
       padding: 4px 0;
       border-bottom: 1px dashed #eee;
     }
-
     .borrowed-book-item:last-child {
       border-bottom: none;
     }
-
     .borrowed-book-item button {
       padding: 3px 8px;
       font-size: 0.8em;
       margin-left: 10px;
       white-space: nowrap;
     }
-
     .no-books-borrowed {
       color: #777;
       font-style: italic;
     }
-
     #savedClassLists {
       display: flex;
       flex-wrap: wrap;
@@ -501,7 +439,6 @@
       margin-top: 15px;
       justify-content: center;
     }
-
     #savedClassLists button {
       background-color: #4CAF50;
       color: white;
@@ -513,18 +450,15 @@
       flex-grow: 1;
       max-width: 180px;
     }
-
     #savedClassLists button:hover {
       background-color: #45a049;
     }
-
     #savedClassLists button.delete-btn {
       background-color: #f44336;
       margin-left: 5px;
       flex-grow: 0;
       width: auto;
     }
-
     #savedClassLists button.delete-btn:hover {
       background-color: #da190b;
     }
@@ -1186,18 +1120,15 @@
         } else {
           console.warn(`Returned book "${entryToReturn.book}" not found in catalog.`);
         }
-        entryToReturn.status = 'Returned';
-        entryToReturn.dateReturned = new Date().toISOString().split('T')[0];
+        // Remove the book entry from cachedBorrowedBooks instead of marking it as Returned
+        cachedBorrowedBooks = cachedBorrowedBooks.filter(entry => entry.id !== borrowId);
         saveData('borrowedBooks', cachedBorrowedBooks);
-        loadBorrowed(); // Refresh borrowed books table to remove returned entry
+        loadBorrowed(); // Refresh borrowed books table to reflect removal
         loadBookCatalog();
         loadDueReminders();
         loadClassListWithBorrowedBooks(currentImportedLearners);
-        // Trigger learner history update if the learner's name is in the search input
-        if (learnerSearchInput.value.trim()) {
-          loadLearnerHistory();
-        }
-        showNotification(`"${entryToReturn.book}" successfully returned by ${entryToReturn.name}!`, 'success');
+        // Do not update learner history since the record is removed
+        showNotification(`"${entryToReturn.book}" returned by ${entryToReturn.name} and removed from borrowed books.`, 'success');
       }
     }
 
@@ -1239,7 +1170,7 @@
           <td>${entry.borrowDate}</td>
           <td>${entry.returnDate}</td>
           <td>${entry.status === 'Returned' ? (entry.dateReturned || 'N/A') : 'Still Borrowed'}</td>
-          <td class="${entry.status === 'Overdue' ? 'overdue' : ''}">${entry.status}</td>
+          <td class="${entry.status === 'Returned' ? 'returned' : entry.status === 'Overdue' ? 'overdue' : ''}">${entry.status}</td>
         `;
         learnerHistoryTableBody.appendChild(tr);
       });
@@ -1467,7 +1398,7 @@
       });
     }
 
-    // Export to Excel (Updated for mobile compatibility)
+    // Export to Excel
     function exportToExcel() {
       if (typeof XLSX === 'undefined') {
         showNotification('Excel export library failed to load. Please check your internet connection or try again later.', 'error');
@@ -1492,18 +1423,6 @@
         a.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
-
-        // Fallback to data URL if Blob fails
-        if (!navigator.userAgent.includes('Mobile') || confirm('Blob download failed. Try data URL method?')) {
-          const wboutBase64 = XLSX.write(wb, { bookType: 'xlsx', type: 'base64' });
-          const dataUrl = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${wboutBase64}`;
-          const fallbackA = document.createElement('a');
-          fallbackA.href = dataUrl;
-          fallbackA.download = 'borrowed_books.xlsx';
-          document.body.appendChild(fallbackA);
-          fallbackA.click();
-          document.body.removeChild(fallbackA);
-        }
         setTimeout(() => showNotification('Borrowed books exported to Excel successfully.', 'success'), 500);
       } catch (e) {
         console.error('Export to Excel failed:', e);
