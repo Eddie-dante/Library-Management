@@ -1138,7 +1138,7 @@
     // Borrowed Books Table
     function loadBorrowed() {
       tableBody.innerHTML = '';
-      const activeBorrows = cachedBorrowedBooks.filter(entry => entry.status === 'Borrowed');
+      const activeBorrows = cachedBorrowedBooks.filter(entry => entry.status === 'Borrowed'); // Only show borrowed books
       const today = new Date().toISOString().split('T')[0];
 
       if (activeBorrows.length === 0) {
@@ -1189,10 +1189,14 @@
         entryToReturn.status = 'Returned';
         entryToReturn.dateReturned = new Date().toISOString().split('T')[0];
         saveData('borrowedBooks', cachedBorrowedBooks);
-        loadBorrowed();
+        loadBorrowed(); // Refresh borrowed books table to remove returned entry
         loadBookCatalog();
         loadDueReminders();
         loadClassListWithBorrowedBooks(currentImportedLearners);
+        // Trigger learner history update if the learner's name is in the search input
+        if (learnerSearchInput.value.trim()) {
+          loadLearnerHistory();
+        }
         showNotification(`"${entryToReturn.book}" successfully returned by ${entryToReturn.name}!`, 'success');
       }
     }
@@ -1220,7 +1224,7 @@
       }
       const filteredHistory = cachedBorrowedBooks
         .filter(entry => entry.name.toLowerCase().includes(searchTerm) || (entry.admAllover && entry.admAllover.toLowerCase().includes(searchTerm)))
-        .sort((a, b) => new Date(b.borrowDate) - new Date(a.borrowDate));
+        .sort((a, b) => new Date(b.borrowDate) - new Date(a.borrowDate)); // Sort by borrow date descending
       if (filteredHistory.length === 0) {
         learnerHistoryTableBody.innerHTML = `<tr><td colspan="8">No history found for "${searchTerm}".</td></tr>`;
         return;
@@ -1463,13 +1467,48 @@
       });
     }
 
-    // Export to Excel
+    // Export to Excel (Updated for mobile compatibility)
     function exportToExcel() {
-      const ws = XLSX.utils.json_to_sheet(cachedBorrowedBooks);
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, 'Borrowed Books');
-      XLSX.write(wb, 'borrowed_books.xlsx');
-      showNotification('Borrowed books exported to Excel successfully.', 'success');
+      if (typeof XLSX === 'undefined') {
+        showNotification('Excel export library failed to load. Please check your internet connection or try again later.', 'error');
+        console.error('SheetJS library not loaded.');
+        return;
+      }
+      if (!cachedBorrowedBooks || cachedBorrowedBooks.length === 0) {
+        showNotification('No borrowed books data to export.', 'error');
+        return;
+      }
+      try {
+        const ws = XLSX.utils.json_to_sheet(cachedBorrowedBooks);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Borrowed Books');
+        const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+        const blob = new Blob([wbout], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'borrowed_books.xlsx';
+        document.body.appendChild(a);
+        a.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+
+        // Fallback to data URL if Blob fails
+        if (!navigator.userAgent.includes('Mobile') || confirm('Blob download failed. Try data URL method?')) {
+          const wboutBase64 = XLSX.write(wb, { bookType: 'xlsx', type: 'base64' });
+          const dataUrl = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${wboutBase64}`;
+          const fallbackA = document.createElement('a');
+          fallbackA.href = dataUrl;
+          fallbackA.download = 'borrowed_books.xlsx';
+          document.body.appendChild(fallbackA);
+          fallbackA.click();
+          document.body.removeChild(fallbackA);
+        }
+        setTimeout(() => showNotification('Borrowed books exported to Excel successfully.', 'success'), 500);
+      } catch (e) {
+        console.error('Export to Excel failed:', e);
+        showNotification('Failed to export to Excel. Please try again.', 'error');
+      }
     }
 
     // Table Sorting
